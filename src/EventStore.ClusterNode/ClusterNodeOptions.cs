@@ -127,7 +127,7 @@ namespace EventStore.ClusterNode {
 		public int ClusterGossipPort { get; set; }
 
 		[ArgDescription(Opts.GossipSeedDescr, Opts.ClusterGroup)]
-		public DnsEndPoint[] GossipSeed { get; set; }
+		public EndPoint[] GossipSeed { get; set; }
 
 		[ArgDescription(Opts.StatsPeriodDescr, Opts.AppGroup)]
 		public int StatsPeriodSec { get; set; }

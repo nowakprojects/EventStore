@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using EventStore.Common.Utils;
 using EventStore.Core.Cluster;
 using EventStore.Core.Data;
 using EventStore.Core.Messages;
@@ -32,7 +33,8 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 		private MemberInfo[] CreateInitialGossip(ElectionsInstance instance, ElectionsInstance[] allInstances) {
 			return new[] {
 				MemberInfo.ForVNode(instance.InstanceId, DateTime.UtcNow, VNodeState.Unknown, true,
-					instance.EndPoint, null, instance.EndPoint, null, instance.EndPoint, instance.EndPoint,
+					new IPEndPoint(IPAddress.Loopback, 1112), null, new IPEndPoint(IPAddress.Loopback, 1113), null,
+					instance.EndPoint, instance.EndPoint,
 					-1, 0, 0, -1, -1, Guid.Empty, 0, false)
 			};
 		}
@@ -41,14 +43,15 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 			RandTestQueueItem item,
 			ElectionsInstance[] instances,
 			MemberInfo[] initialGossip,
-			Dictionary<IPEndPoint, MemberInfo[]> previousGossip) {
-			if (iteration == 1 || (iteration % 100 != (item.EndPoint.Port % 1000) && _randomCase.Next(100) < 30))
+			Dictionary<EndPoint, MemberInfo[]> previousGossip) {
+			if (iteration == 1 || (iteration % 100 != (item.EndPoint.GetPort() % 1000) && _randomCase.Next(100) < 30))
 				return null;
 
 			if (previousGossip[item.EndPoint].Length < 5) {
 				return instances.Select((x, i) =>
 						MemberInfo.ForVNode(x.InstanceId, DateTime.UtcNow, VNodeState.Unknown, true,
-							x.EndPoint, null, x.EndPoint, null, x.EndPoint, x.EndPoint,
+							new IPEndPoint(IPAddress.Loopback, 1112), null, new IPEndPoint(IPAddress.Loopback, 1113), null,
+							x.EndPoint, x.EndPoint,
 							-1, 0, 0, -1, -1, Guid.Empty, 0, false))
 					.ToArray();
 			}

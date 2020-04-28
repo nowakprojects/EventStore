@@ -109,7 +109,9 @@ namespace EventStore.Core.Services.Gossip {
 		public void Handle(GossipMessage.GotGossipSeedSources message) {
 			var now = _timeProvider.UtcNow;
 			var dnsCluster = new ClusterInfo(
-				message.GossipSeeds.Select(x => MemberInfo.ForManager(Guid.Empty, now, true, x, x)).ToArray());
+				message.GossipSeeds.Select(x => MemberInfo.ForManager(Guid.Empty, now, true, 
+					new IPEndPoint(IPAddress.Loopback, 1112), new IPEndPoint(IPAddress.Loopback, 1113), //TODO(pieterg) fix this
+					x, x)).ToArray());
 
 			var oldCluster = _cluster;
 			_cluster = MergeClusters(_cluster, dnsCluster, null, x => x, _timeProvider.UtcNow, NodeInfo, CurrentLeader,
@@ -277,7 +279,7 @@ namespace EventStore.Core.Services.Gossip {
 		}
 
 		public static ClusterInfo MergeClusters(ClusterInfo myCluster, ClusterInfo othersCluster,
-			IPEndPoint peerEndPoint, Func<MemberInfo, MemberInfo> update, DateTime utcNow,
+			EndPoint peerEndPoint, Func<MemberInfo, MemberInfo> update, DateTime utcNow,
 			VNodeInfo me, VNodeInfo currentLeader, TimeSpan allowedTimeDifference, TimeSpan deadMemberRemovalTimeout) {
 			var members = myCluster.Members.ToDictionary(member => member.InternalHttpEndPoint);
 			foreach (var member in othersCluster.Members) {
@@ -333,12 +335,12 @@ namespace EventStore.Core.Services.Gossip {
 		}
 
 		private static void LogClusterChange(ClusterInfo oldCluster, ClusterInfo newCluster, string source) {
-			var ipEndPointComparer = new IPEndPointComparer();
+			var endPointComparer = new EndPointComparer();
 
 			List<MemberInfo> oldMembers = oldCluster.Members
-				.OrderByDescending(x => x.InternalHttpEndPoint, ipEndPointComparer).ToList();
+				.OrderByDescending(x => x.InternalHttpEndPoint, endPointComparer).ToList();
 			List<MemberInfo> newMembers = newCluster.Members
-				.OrderByDescending(x => x.InternalHttpEndPoint, ipEndPointComparer).ToList();
+				.OrderByDescending(x => x.InternalHttpEndPoint, endPointComparer).ToList();
 			Log.Information(
 				"CLUSTER HAS CHANGED {source}"
 				+ "\nOld:"

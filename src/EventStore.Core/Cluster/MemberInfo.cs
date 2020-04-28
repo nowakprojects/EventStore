@@ -17,8 +17,8 @@ namespace EventStore.Core.Cluster {
 		public readonly IPEndPoint InternalSecureTcpEndPoint;
 		public readonly IPEndPoint ExternalTcpEndPoint;
 		public readonly IPEndPoint ExternalSecureTcpEndPoint;
-		public readonly IPEndPoint InternalHttpEndPoint;
-		public readonly IPEndPoint ExternalHttpEndPoint;
+		public readonly EndPoint InternalHttpEndPoint;
+		public readonly EndPoint ExternalHttpEndPoint;
 
 		public readonly long LastCommitPosition;
 		public readonly long WriterCheckpoint;
@@ -29,6 +29,15 @@ namespace EventStore.Core.Cluster {
 
 		public readonly int NodePriority;
 		public readonly bool IsReadOnlyReplica;
+		
+		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
+			IPEndPoint internalTcpEndPoint, IPEndPoint externalTcpEndPoint,
+			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint) {
+			return new MemberInfo(instanceId, timeStamp, VNodeState.Manager, isAlive,
+				internalTcpEndPoint, null, externalTcpEndPoint, null,
+				internalHttpEndPoint, externalHttpEndPoint,
+				-1, -1, -1, -1, -1, Guid.Empty, 0, false);
+		}
 
 		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
 			IPEndPoint internalHttpEndPoint, IPEndPoint externalHttpEndPoint) {
@@ -46,8 +55,8 @@ namespace EventStore.Core.Cluster {
 			IPEndPoint internalSecureTcpEndPoint,
 			IPEndPoint externalTcpEndPoint,
 			IPEndPoint externalSecureTcpEndPoint,
-			IPEndPoint internalHttpEndPoint,
-			IPEndPoint externalHttpEndPoint,
+			EndPoint internalHttpEndPoint,
+			EndPoint externalHttpEndPoint,
 			long lastCommitPosition,
 			long writerCheckpoint,
 			long chaserCheckpoint,
@@ -69,7 +78,7 @@ namespace EventStore.Core.Cluster {
 		internal MemberInfo(Guid instanceId, DateTime timeStamp, VNodeState state, bool isAlive,
 			IPEndPoint internalTcpEndPoint, IPEndPoint internalSecureTcpEndPoint,
 			IPEndPoint externalTcpEndPoint, IPEndPoint externalSecureTcpEndPoint,
-			IPEndPoint internalHttpEndPoint, IPEndPoint externalHttpEndPoint,
+			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint,
 			long lastCommitPosition, long writerCheckpoint, long chaserCheckpoint,
 			long epochPosition, int epochNumber, Guid epochId, int nodePriority, bool isReadOnlyReplica) {
 			Ensure.Equal(false, internalTcpEndPoint == null && internalSecureTcpEndPoint == null, "Both internal TCP endpoints are null");
@@ -128,7 +137,7 @@ namespace EventStore.Core.Cluster {
 			IsReadOnlyReplica = dto.IsReadOnlyReplica;
 		}
 
-		public bool Is(IPEndPoint endPoint) {
+		public bool Is(EndPoint endPoint) {
 			return endPoint != null
 			       && (InternalHttpEndPoint.Equals(endPoint)
 			           || ExternalHttpEndPoint.Equals(endPoint)

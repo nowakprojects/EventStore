@@ -58,7 +58,7 @@ namespace EventStore.Core {
 
 		protected bool _discoverViaDns;
 		protected string _clusterDns;
-		protected List<DnsEndPoint> _gossipSeeds;
+		protected List<EndPoint> _gossipSeeds;
 
 		protected TimeSpan _minFlushDelay;
 
@@ -177,7 +177,7 @@ namespace EventStore.Core {
 
 			_discoverViaDns = Opts.DiscoverViaDnsDefault;
 			_clusterDns = Opts.ClusterDnsDefault;
-			_gossipSeeds = new List<DnsEndPoint>();
+			_gossipSeeds = new List<EndPoint>();
 
 			_minFlushDelay = TimeSpan.FromMilliseconds(Opts.MinFlushDelayMsDefault);
 
@@ -560,7 +560,7 @@ namespace EventStore.Core {
 		/// </summary>
 		/// <param name="endpoints">The gossip seeds this node should try to talk to</param>
 		/// <returns>A <see cref="VNodeBuilder"/> with the options set</returns>
-		public VNodeBuilder WithGossipSeeds(params DnsEndPoint[] endpoints) {
+		public VNodeBuilder WithGossipSeeds(params EndPoint[] endpoints) {
 			_gossipSeeds.Clear();
 			_gossipSeeds.AddRange(endpoints);
 			_discoverViaDns = false;

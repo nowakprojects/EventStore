@@ -6,14 +6,14 @@ using EventStore.Core.Tests.Infrastructure;
 
 namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 	internal class SendOverGrpcBlockingProcessor : SendOverGrpcProcessor {
-		private readonly Dictionary<IPEndPoint, bool> _endpointsToSkip;
+		private readonly Dictionary<EndPoint, bool> _endpointsToSkip;
 
 		public SendOverGrpcBlockingProcessor(Random rnd,
 			RandomTestRunner runner,
 			double lossProb,
 			double dupProb,
 			int maxDelay) : base(rnd, runner, lossProb, dupProb, maxDelay) {
-			_endpointsToSkip = new Dictionary<IPEndPoint, bool>();
+			_endpointsToSkip = new Dictionary<EndPoint, bool>();
 		}
 
 		public void RegisterEndpointToSkip(IPEndPoint endPoint, bool shouldSkip) {

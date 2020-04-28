@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using EventStore.Common.Utils;
 
 namespace EventStore.Core.Messages {
 	public partial class TcpClientMessageDto {
@@ -52,7 +53,7 @@ namespace EventStore.Core.Messages {
 		public partial class NotHandled {
 			public partial class LeaderInfo {
 				public LeaderInfo(IPEndPoint externalTcpEndPoint, IPEndPoint externalSecureTcpEndPoint,
-					IPEndPoint externalHttpEndPoint) {
+					EndPoint externalHttpEndPoint) {
 					ExternalTcpAddress = externalTcpEndPoint == null ? null : externalTcpEndPoint.Address.ToString();
 					ExternalTcpPort = externalTcpEndPoint == null ? (int?) null : externalTcpEndPoint.Port;
 					ExternalSecureTcpAddress = externalSecureTcpEndPoint == null
@@ -60,8 +61,8 @@ namespace EventStore.Core.Messages {
 						: externalSecureTcpEndPoint.Address.ToString();
 					ExternalSecureTcpPort =
 						externalSecureTcpEndPoint == null ? (int?)null : externalSecureTcpEndPoint.Port;
-					ExternalHttpAddress = externalHttpEndPoint.Address.ToString();
-					ExternalHttpPort = externalHttpEndPoint.Port;
+					ExternalHttpAddress = externalHttpEndPoint.GetHost();
+					ExternalHttpPort = externalHttpEndPoint.GetPort();
 				}
 			}
 		}

@@ -43,7 +43,7 @@ namespace EventStore.Core.Services {
 		public static readonly TimeSpan SendViewChangeProofInterval = TimeSpan.FromMilliseconds(5000);
 
 		private static readonly ILogger Log = Serilog.Log.ForContext<ElectionsService>();
-		private static readonly IPEndPointComparer IPComparer = new IPEndPointComparer();
+		private static readonly EndPointComparer IPComparer = new EndPointComparer();
 
 		private readonly IPublisher _publisher;
 		private readonly IEnvelope _publisherEnvelope;
@@ -450,7 +450,7 @@ namespace EventStore.Core.Services {
 				best.LastCommitPosition, best.WriterCheckpoint, best.ChaserCheckpoint, best.NodePriority);
 		}
 
-		public static bool IsLegitimateLeader(int view, IPEndPoint proposingServerEndPoint, Guid proposingServerId,
+		public static bool IsLegitimateLeader(int view, EndPoint proposingServerEndPoint, Guid proposingServerId,
 			LeaderCandidate candidate, MemberInfo[] servers, Guid? lastElectedLeader, VNodeInfo nodeInfo,
 			LeaderCandidate ownInfo,
 			Guid? resigningLeader) {
@@ -591,7 +591,7 @@ namespace EventStore.Core.Services {
 				candidate.EpochNumber, candidate.EpochPosition, candidate.EpochId, candidate.NodePriority);
 		}
 
-		private static string FormatNodeInfo(IPEndPoint serverEndPoint, Guid serverId,
+		private static string FormatNodeInfo(EndPoint serverEndPoint, Guid serverId,
 			long lastCommitPosition, long writerCheckpoint, long chaserCheckpoint,
 			int epochNumber, long epochPosition, Guid epochId, int priority) {
 			return string.Format("[{0},{1:B}](L={2},W={3},C={4},E{5}@{6}:{7:B},Priority={8})",
@@ -602,7 +602,7 @@ namespace EventStore.Core.Services {
 
 		public class LeaderCandidate {
 			public readonly Guid InstanceId;
-			public readonly IPEndPoint InternalHttp;
+			public readonly EndPoint InternalHttp;
 
 			public readonly int EpochNumber;
 			public readonly long EpochPosition;
@@ -614,7 +614,7 @@ namespace EventStore.Core.Services {
 
 			public readonly int NodePriority;
 
-			public LeaderCandidate(Guid instanceId, IPEndPoint internalHttp,
+			public LeaderCandidate(Guid instanceId, EndPoint internalHttp,
 				int epochNumber, long epochPosition, Guid epochId,
 				long lastCommitPosition, long writerCheckpoint, long chaserCheckpoint,
 				int nodePriority) {

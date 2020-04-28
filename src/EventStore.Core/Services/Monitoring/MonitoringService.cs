@@ -68,7 +68,7 @@ namespace EventStore.Core.Services.Monitoring {
 			ICheckpoint writerCheckpoint,
 			string dbPath,
 			TimeSpan statsCollectionPeriod,
-			IPEndPoint nodeEndpoint,
+			EndPoint nodeEndpoint,
 			StatsStorage statsStorage,
 			IPEndPoint tcpEndpoint,
 			IPEndPoint tcpSecureEndpoint) {

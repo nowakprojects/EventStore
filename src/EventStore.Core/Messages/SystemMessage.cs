@@ -328,11 +328,11 @@ namespace EventStore.Core.Messages {
 				get { return TypeId; }
 			}
 
-			public readonly IPEndPoint VNodeEndPoint;
+			public readonly EndPoint VNodeEndPoint;
 			public readonly Guid ConnectionId;
 			public readonly Guid? SubscriptionId;
 
-			public VNodeConnectionLost(IPEndPoint vNodeEndPoint, Guid connectionId, Guid? subscriptionId=null) {
+			public VNodeConnectionLost(EndPoint vNodeEndPoint, Guid connectionId, Guid? subscriptionId=null) {
 				Ensure.NotNull(vNodeEndPoint, "vNodeEndPoint");
 				Ensure.NotEmptyGuid(connectionId, "connectionId");
 
@@ -349,10 +349,10 @@ namespace EventStore.Core.Messages {
 				get { return TypeId; }
 			}
 
-			public readonly IPEndPoint VNodeEndPoint;
+			public readonly EndPoint VNodeEndPoint;
 			public readonly Guid ConnectionId;
 
-			public VNodeConnectionEstablished(IPEndPoint vNodeEndPoint, Guid connectionId) {
+			public VNodeConnectionEstablished(EndPoint vNodeEndPoint, Guid connectionId) {
 				Ensure.NotNull(vNodeEndPoint, "vNodeEndPoint");
 				Ensure.NotEmptyGuid(connectionId, "connectionId");
 

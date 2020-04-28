@@ -105,7 +105,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 				return null;
 			}
 
-			public IPEndPoint[] EndGetHostEndpoints(IAsyncResult asyncResult) {
+			public EndPoint[] EndGetHostEndpoints(IAsyncResult asyncResult) {
 				return _ipEndPoints.ToArray();
 			}
 		}

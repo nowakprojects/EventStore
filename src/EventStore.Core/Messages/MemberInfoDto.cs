@@ -1,4 +1,5 @@
 using System;
+using EventStore.Common.Utils;
 using EventStore.Core.Cluster;
 using EventStore.Core.Data;
 
@@ -55,11 +56,11 @@ namespace EventStore.Core.Messages {
 			ExternalSecureTcpPort =
 				member.ExternalSecureTcpEndPoint == null ? 0 : member.ExternalSecureTcpEndPoint.Port;
 
-			InternalHttpIp = member.InternalHttpEndPoint.Address.ToString();
-			InternalHttpPort = member.InternalHttpEndPoint.Port;
+			InternalHttpIp = member.InternalHttpEndPoint.GetHost();
+			InternalHttpPort = member.InternalHttpEndPoint.GetPort();
 
-			ExternalHttpIp = member.ExternalHttpEndPoint.Address.ToString();
-			ExternalHttpPort = member.ExternalHttpEndPoint.Port;
+			ExternalHttpIp = member.ExternalHttpEndPoint.GetHost();
+			ExternalHttpPort = member.ExternalHttpEndPoint.GetPort();
 
 			LastCommitPosition = member.LastCommitPosition;
 			WriterCheckpoint = member.WriterCheckpoint;

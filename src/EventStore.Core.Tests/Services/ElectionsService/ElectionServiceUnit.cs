@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using EventStore.Common.Utils;
 using EventStore.Core.Bus;
 using EventStore.Core.Cluster;
 using EventStore.Core.Data;
@@ -11,6 +12,7 @@ using EventStore.Core.Services.TimerService;
 using EventStore.Core.Tests.Fakes;
 using EventStore.Core.Tests.Services.TimeService;
 using EventStore.Core.TransactionLog.Checkpoint;
+using Serilog;
 
 namespace EventStore.Core.Tests.Services.ElectionsService {
 	public class ElectionsServiceUnit {
@@ -21,7 +23,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 
 		public ClusterInfo ClusterInfo { get; private set; }
 
-		public IPEndPoint OwnEndPoint {
+		public EndPoint OwnEndPoint {
 			get { return InitialClusterSettings.Self.NodeInfo.InternalHttp; }
 		}
 
@@ -94,7 +96,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 						Guid.Empty, 0, false)));
 
 			var ordered = members.OrderBy(x =>
-				string.Format("{0}:{1}", x.InternalHttpEndPoint.ToString(), x.InternalHttpEndPoint.Port));
+				string.Format("{0}:{1}", x.InternalHttpEndPoint.ToString(), x.InternalHttpEndPoint.GetPort()));
 
 			return new ClusterInfo(ordered.ToArray());
 		}
@@ -164,8 +166,9 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 			predicate = predicate ?? (x => true);
 			return ClusterInfo.Members.Where(predicate).Select(x =>
 				x.State == VNodeState.Manager
-					? MemberInfo.ForManager(x.InstanceId, x.TimeStamp, x.IsAlive, x.InternalHttpEndPoint,
-						x.ExternalHttpEndPoint)
+					? MemberInfo.ForManager(x.InstanceId, x.TimeStamp, x.IsAlive,
+						new IPEndPoint(IPAddress.Loopback, 1112), new IPEndPoint(IPAddress.Loopback, 1113),
+						x.InternalHttpEndPoint, x.ExternalHttpEndPoint)
 					: MemberInfo.ForVNode(x.InstanceId, x.TimeStamp, x.State, x.IsAlive,
 						x.InternalTcpEndPoint, x.InternalSecureTcpEndPoint,
 						x.ExternalTcpEndPoint, x.ExternalSecureTcpEndPoint,

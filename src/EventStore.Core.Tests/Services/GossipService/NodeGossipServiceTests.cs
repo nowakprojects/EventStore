@@ -113,8 +113,8 @@ namespace EventStore.Core.Tests.Services.GossipService {
 		/// The initial state for a node currently is represented as a Manager
 		/// </summary>
 		protected static MemberInfo InitialStateForVNode(VNodeInfo nodeInfo, DateTime utcNow, bool isAlive = true) {
-			return MemberInfo.ForManager(Guid.Empty, utcNow, isAlive, nodeInfo.InternalHttp,
-				nodeInfo.InternalHttp);
+			return MemberInfo.ForManager(Guid.Empty, utcNow, isAlive,
+				nodeInfo.InternalTcp, nodeInfo.ExternalTcp, nodeInfo.InternalHttp, nodeInfo.InternalHttp);
 		}
 	}
 
@@ -169,7 +169,7 @@ namespace EventStore.Core.Tests.Services.GossipService {
 				throw new NotImplementedException();
 			}
 
-			public IPEndPoint[] EndGetHostEndpoints(IAsyncResult asyncResult) {
+			public EndPoint[] EndGetHostEndpoints(IAsyncResult asyncResult) {
 				throw new NotImplementedException();
 			}
 		}

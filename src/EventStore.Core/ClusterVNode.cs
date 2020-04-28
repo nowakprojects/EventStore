@@ -201,7 +201,7 @@ namespace EventStore.Core {
 				(endpoint, publisher) =>
 					new EventStoreClusterClient(
 						new UriBuilder(_vNodeSettings.GossipOverHttps ? Uri.UriSchemeHttps : Uri.UriSchemeHttp,
-							endpoint.Address.ToString(), endpoint.Port).Uri, publisher, _internalServerCertificateValidator, _certificate));
+							endpoint.GetHost(), endpoint.GetPort()).Uri, publisher, _internalServerCertificateValidator, _certificate));
 
 			_mainBus.Subscribe<ClusterClientMessage.CleanCache>(_eventStoreClusterClientCache);
 			_mainBus.Subscribe<SystemMessage.SystemInit>(_eventStoreClusterClientCache);

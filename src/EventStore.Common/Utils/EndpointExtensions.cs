@@ -39,6 +39,30 @@ namespace EventStore.Common.Utils {
 			return null;
 		}
 
+		public static string GetHost(this EndPoint endpoint) {
+			if (endpoint is IPEndPoint ip) {
+				return ip.Address.ToString();
+			}
+
+			if (endpoint is DnsEndPoint dns) {
+				return dns.Host;
+			}
+
+			throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(), "An invalid endpoint has been provided");
+		}
+		
+		public static int GetPort(this EndPoint endpoint) {
+			if (endpoint is IPEndPoint ip) {
+				return ip.Port;
+			}
+
+			if (endpoint is DnsEndPoint dns) {
+				return dns.Port;
+			}
+
+			throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(), "An invalid endpoint has been provided");
+		}
+
 		public static DnsEndPoint ToDnsEndPoint(this IPEndPoint ipEndPoint) {
 			return new DnsEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
 		}

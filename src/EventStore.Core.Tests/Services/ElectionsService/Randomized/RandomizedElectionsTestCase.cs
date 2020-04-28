@@ -114,7 +114,8 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 			List<ElectionsInstance> allInstances) {
 			var members = allInstances.Select(
 				x => MemberInfo.ForVNode(x.InstanceId, DateTime.UtcNow, VNodeState.Unknown, true,
-					x.EndPoint, null, x.EndPoint, null, x.EndPoint, x.EndPoint, -1, 0, 0, -1, -1, Guid.Empty, 0, false));
+					new IPEndPoint(IPAddress.Loopback, 1112), null, new IPEndPoint(IPAddress.Loopback, 1113), null,
+					x.EndPoint, x.EndPoint, -1, 0, 0, -1, -1, Guid.Empty, 0, false));
 			var gossip = new GossipMessage.GossipUpdated(new ClusterInfo(members.ToArray()));
 			return gossip;
 		}
