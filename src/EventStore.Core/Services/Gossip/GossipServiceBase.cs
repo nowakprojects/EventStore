@@ -110,7 +110,7 @@ namespace EventStore.Core.Services.Gossip {
 			var now = _timeProvider.UtcNow;
 			var dnsCluster = new ClusterInfo(
 				message.GossipSeeds.Select(x => MemberInfo.ForManager(Guid.Empty, now, true, 
-					new IPEndPoint(IPAddress.Loopback, 1112), new IPEndPoint(IPAddress.Loopback, 1113), //TODO(pieterg) fix this
+					new IPEndPoint(IPAddress.Loopback, 0), new IPEndPoint(IPAddress.Loopback, 0), //TODO(pieterg) fix this
 					x, x)).ToArray());
 
 			var oldCluster = _cluster;

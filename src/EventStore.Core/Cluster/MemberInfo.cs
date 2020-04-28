@@ -42,7 +42,7 @@ namespace EventStore.Core.Cluster {
 		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
 			IPEndPoint internalHttpEndPoint, IPEndPoint externalHttpEndPoint) {
 			return new MemberInfo(instanceId, timeStamp, VNodeState.Manager, isAlive,
-				internalHttpEndPoint, null, externalHttpEndPoint, null,
+				new IPEndPoint(internalHttpEndPoint.Address, 0), null, new IPEndPoint(externalHttpEndPoint.Address, 0), null,
 				internalHttpEndPoint, externalHttpEndPoint,
 				-1, -1, -1, -1, -1, Guid.Empty, 0, false);
 		}

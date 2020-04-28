@@ -167,7 +167,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 			return ClusterInfo.Members.Where(predicate).Select(x =>
 				x.State == VNodeState.Manager
 					? MemberInfo.ForManager(x.InstanceId, x.TimeStamp, x.IsAlive,
-						new IPEndPoint(IPAddress.Loopback, 1112), new IPEndPoint(IPAddress.Loopback, 1113),
+						x.InternalTcpEndPoint, x.ExternalTcpEndPoint,
 						x.InternalHttpEndPoint, x.ExternalHttpEndPoint)
 					: MemberInfo.ForVNode(x.InstanceId, x.TimeStamp, x.State, x.IsAlive,
 						x.InternalTcpEndPoint, x.InternalSecureTcpEndPoint,
