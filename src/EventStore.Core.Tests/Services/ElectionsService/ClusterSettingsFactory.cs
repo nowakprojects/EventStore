@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using EventStore.Common.Utils;
 using EventStore.Core.Authentication;
 using EventStore.Core.Authentication.InternalAuthentication;
 using EventStore.Core.Authorization;
@@ -34,7 +35,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 					GetLoopbackForPort(httpIntPort),
 					GetLoopbackForPort(httpExtPort),
 					null, null, 0, 0),
-				false, certificate, new X509Certificate2Collection(trustedRootCertificate), 1, false, "dns", new[] {GetLoopbackForPort(ManagerPort)},
+				false, certificate, new X509Certificate2Collection(trustedRootCertificate), 1, false, "dns", new[] {GetLoopbackForPort(ManagerPort).ToDnsEndPoint()},
 				TFConsts.MinFlushDelayMs, 3, 2, 2, TimeSpan.FromSeconds(2),
 				TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), false, false,TimeSpan.FromHours(1),
 				StatsStorage.StreamAndFile, 0,

@@ -74,7 +74,7 @@ namespace EventStore.Core.Tests.Helpers {
 
 		public MiniClusterNode(
 			string pathname, int debugIndex, IPEndPoint internalTcp, IPEndPoint internalTcpSec, IPEndPoint internalHttp,
-			IPEndPoint externalTcp, IPEndPoint externalTcpSec, IPEndPoint externalHttp, IPEndPoint[] gossipSeeds,
+			IPEndPoint externalTcp, IPEndPoint externalTcpSec, IPEndPoint externalHttp, DnsEndPoint[] gossipSeeds,
 			ISubsystem[] subsystems = null, int? chunkSize = null, int? cachedChunkSize = null,
 			bool enableTrustedAuth = false, bool skipInitializeStandardUsersCheck = true, int memTableSize = 1000,
 			bool inMemDb = true, bool disableFlushToDisk = false, bool readOnlyReplica = false) {

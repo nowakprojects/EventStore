@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using EventStore.Common.Utils;
 
 namespace EventStore.Core.Tests.Integration {
 	public class specification_with_cluster : SpecificationWithDirectoryPerTestFixture {
@@ -112,13 +113,13 @@ namespace EventStore.Core.Tests.Integration {
 			Assert.IsEmpty(duplicates);
 
 			_nodeCreationFactory.Add(0, wait => CreateNode(0,
-				_nodeEndpoints[0], new[] {_nodeEndpoints[1].InternalHttp, _nodeEndpoints[2].InternalHttp},
+				_nodeEndpoints[0], new[] {_nodeEndpoints[1].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[2].InternalHttp.ToDnsEndPoint()},
 				wait));
 			_nodeCreationFactory.Add(1, wait => CreateNode(1,
-				_nodeEndpoints[1], new[] {_nodeEndpoints[0].InternalHttp, _nodeEndpoints[2].InternalHttp},
+				_nodeEndpoints[1], new[] {_nodeEndpoints[0].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[2].InternalHttp.ToDnsEndPoint()},
 				wait));
 			_nodeCreationFactory.Add(2, wait => CreateNode(2,
-				_nodeEndpoints[2], new[] {_nodeEndpoints[0].InternalHttp, _nodeEndpoints[1].InternalHttp},
+				_nodeEndpoints[2], new[] {_nodeEndpoints[0].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[1].InternalHttp.ToDnsEndPoint()},
 				wait));
 
 			_nodes[0] = _nodeCreationFactory[0](true);
@@ -152,7 +153,7 @@ namespace EventStore.Core.Tests.Integration {
 			return _nodes[nodeNum].Shutdown(keepDb: true);
 		}
 
-		protected virtual MiniClusterNode CreateNode(int index, Endpoints endpoints, IPEndPoint[] gossipSeeds,
+		protected virtual MiniClusterNode CreateNode(int index, Endpoints endpoints, DnsEndPoint[] gossipSeeds,
 			bool wait = true) {
 			var node = new MiniClusterNode(
 				PathName, index, endpoints.InternalTcp, endpoints.InternalTcpSec, endpoints.InternalHttp,
