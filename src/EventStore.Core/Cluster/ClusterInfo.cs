@@ -51,12 +51,12 @@ namespace EventStore.Core.Cluster {
 				new MemberInfo(
 					Uuid.FromDto(x.InstanceId).ToGuid(), x.TimeStamp.FromTicksSinceEpoch(), (VNodeState)x.State,
 					x.IsAlive,
-					!x.InternalTcpUsesTls ? new IPEndPoint(IPAddress.Parse(x.InternalTcp.Address), (int)x.InternalTcp.Port) : null,
-					x.InternalTcpUsesTls ? new IPEndPoint(IPAddress.Parse(x.InternalTcp.Address), (int)x.InternalTcp.Port) : null,
-					!x.ExternalTcpUsesTls && x.ExternalTcp != null ? new IPEndPoint(IPAddress.Parse(x.ExternalTcp.Address), (int)x.ExternalTcp.Port) : null,
-					x.ExternalTcpUsesTls && x.ExternalTcp != null ? new IPEndPoint(IPAddress.Parse(x.ExternalTcp.Address), (int)x.ExternalTcp.Port) : null,
-					new IPEndPoint(IPAddress.Parse(x.InternalHttp.Address), (int)x.InternalHttp.Port),
-					new IPEndPoint(IPAddress.Parse(x.ExternalHttp.Address), (int)x.ExternalHttp.Port),
+					!x.InternalTcpUsesTls ? new DnsEndPoint(x.InternalTcp.Address, (int)x.InternalTcp.Port) : null,
+					x.InternalTcpUsesTls ? new DnsEndPoint(x.InternalTcp.Address, (int)x.InternalTcp.Port) : null,
+					!x.ExternalTcpUsesTls && x.ExternalTcp != null ? new DnsEndPoint(x.ExternalTcp.Address, (int)x.ExternalTcp.Port) : null,
+					x.ExternalTcpUsesTls && x.ExternalTcp != null ? new DnsEndPoint(x.ExternalTcp.Address, (int)x.ExternalTcp.Port) : null,
+					new DnsEndPoint(x.InternalHttp.Address, (int)x.InternalHttp.Port),
+					new DnsEndPoint(x.ExternalHttp.Address, (int)x.ExternalHttp.Port),
 					x.LastCommitPosition, x.WriterCheckpoint, x.ChaserCheckpoint,
 					x.EpochPosition, x.EpochNumber, Uuid.FromDto(x.EpochId).ToGuid(), x.NodePriority,
 					x.IsReadOnlyReplica
