@@ -408,7 +408,7 @@ namespace EventStore.Core.Services {
 			var proposal = new ElectionMessage.Proposal(_nodeInfo.InstanceId, _nodeInfo.InternalHttp,
 				leader.InstanceId, leader.InternalHttp,
 				_lastInstalledView,
-				leader.EpochNumber, leader.EpochPosition, leader.EpochId,
+				leader.EpochNumber, leader.EpochPosition, leader.EpochId, leader.EpochLeaderInstanceId,
 				leader.LastCommitPosition, leader.WriterCheckpoint, leader.ChaserCheckpoint, leader.NodePriority);
 			Handle(new ElectionMessage.Accept(_nodeInfo.InstanceId, _nodeInfo.InternalHttp,
 				leader.InstanceId, leader.InternalHttp, _lastInstalledView));
