@@ -155,6 +155,7 @@ namespace EventStore.Core.Messages {
 			public readonly int EpochNumber;
 			public readonly long EpochPosition;
 			public readonly Guid EpochId;
+			public readonly Guid EpochLeaderInstanceId;
 			public readonly long LastCommitPosition;
 			public readonly long WriterCheckpoint;
 			public readonly long ChaserCheckpoint;
@@ -166,6 +167,7 @@ namespace EventStore.Core.Messages {
 				int epochNumber,
 				long epochPosition,
 				Guid epochId,
+				Guid epochLeaderInstanceId,
 				long lastCommitPosition,
 				long writerCheckpoint,
 				long chaserCheckpoint,
@@ -176,6 +178,7 @@ namespace EventStore.Core.Messages {
 				EpochNumber = epochNumber;
 				EpochPosition = epochPosition;
 				EpochId = epochId;
+				EpochLeaderInstanceId = epochLeaderInstanceId;
 				LastCommitPosition = lastCommitPosition;
 				WriterCheckpoint = writerCheckpoint;
 				ChaserCheckpoint = chaserCheckpoint;
@@ -190,6 +193,7 @@ namespace EventStore.Core.Messages {
 				EpochNumber = dto.EpochNumber;
 				EpochPosition = dto.EpochPosition;
 				EpochId = dto.EpochId;
+				EpochLeaderInstanceId = dto.EpochLeaderInstanceId;
 				LastCommitPosition = dto.LastCommitPosition;
 				WriterCheckpoint = dto.WriterCheckpoint;
 				ChaserCheckpoint = dto.ChaserCheckpoint;
