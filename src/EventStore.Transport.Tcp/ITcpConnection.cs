@@ -9,8 +9,8 @@ namespace EventStore.Transport.Tcp {
 
 		Guid ConnectionId { get; }
 		string ClientConnectionName { get; }
-		IPEndPoint RemoteEndPoint { get; }
-		IPEndPoint LocalEndPoint { get; }
+		EndPoint RemoteEndPoint { get; }
+		EndPoint LocalEndPoint { get; }
 		int SendQueueSize { get; }
 		int PendingSendBytes { get; }
 		bool IsClosed { get; }

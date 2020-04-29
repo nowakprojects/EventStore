@@ -13,10 +13,10 @@ namespace EventStore.Core.Cluster {
 		public readonly VNodeState State;
 		public readonly bool IsAlive;
 
-		public readonly IPEndPoint InternalTcpEndPoint;
-		public readonly IPEndPoint InternalSecureTcpEndPoint;
-		public readonly IPEndPoint ExternalTcpEndPoint;
-		public readonly IPEndPoint ExternalSecureTcpEndPoint;
+		public readonly EndPoint InternalTcpEndPoint;
+		public readonly EndPoint InternalSecureTcpEndPoint;
+		public readonly EndPoint ExternalTcpEndPoint;
+		public readonly EndPoint ExternalSecureTcpEndPoint;
 		public readonly EndPoint InternalHttpEndPoint;
 		public readonly EndPoint ExternalHttpEndPoint;
 
@@ -31,7 +31,7 @@ namespace EventStore.Core.Cluster {
 		public readonly bool IsReadOnlyReplica;
 		
 		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
-			IPEndPoint internalTcpEndPoint, IPEndPoint externalTcpEndPoint,
+			EndPoint internalTcpEndPoint, EndPoint externalTcpEndPoint,
 			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint) {
 			return new MemberInfo(instanceId, timeStamp, VNodeState.Manager, isAlive,
 				internalTcpEndPoint, null, externalTcpEndPoint, null,
@@ -40,9 +40,9 @@ namespace EventStore.Core.Cluster {
 		}
 
 		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
-			IPEndPoint internalHttpEndPoint, IPEndPoint externalHttpEndPoint) {
+			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint) {
 			return new MemberInfo(instanceId, timeStamp, VNodeState.Manager, isAlive,
-				new IPEndPoint(internalHttpEndPoint.Address, 0), null, new IPEndPoint(externalHttpEndPoint.Address, 0), null,
+				new DnsEndPoint(internalHttpEndPoint.GetHost(), 0), null, new DnsEndPoint(externalHttpEndPoint.GetHost(), 0), null,
 				internalHttpEndPoint, externalHttpEndPoint,
 				-1, -1, -1, -1, -1, Guid.Empty, 0, false);
 		}
@@ -51,10 +51,10 @@ namespace EventStore.Core.Cluster {
 			DateTime timeStamp,
 			VNodeState state,
 			bool isAlive,
-			IPEndPoint internalTcpEndPoint,
-			IPEndPoint internalSecureTcpEndPoint,
-			IPEndPoint externalTcpEndPoint,
-			IPEndPoint externalSecureTcpEndPoint,
+			EndPoint internalTcpEndPoint,
+			EndPoint internalSecureTcpEndPoint,
+			EndPoint externalTcpEndPoint,
+			EndPoint externalSecureTcpEndPoint,
 			EndPoint internalHttpEndPoint,
 			EndPoint externalHttpEndPoint,
 			long lastCommitPosition,
@@ -74,10 +74,31 @@ namespace EventStore.Core.Cluster {
 				lastCommitPosition, writerCheckpoint, chaserCheckpoint,
 				epochPosition, epochNumber, epochId, nodePriority, isReadOnlyReplica);
 		}
+		
+		public static MemberInfo Initial(Guid instanceId,
+			DateTime timeStamp,
+			VNodeState state,
+			bool isAlive,
+			EndPoint internalTcpEndPoint,
+			EndPoint internalSecureTcpEndPoint,
+			EndPoint externalTcpEndPoint,
+			EndPoint externalSecureTcpEndPoint,
+			EndPoint internalHttpEndPoint,
+			EndPoint externalHttpEndPoint,
+			int nodePriority,
+			bool isReadOnlyReplica) {
+			if (state == VNodeState.Manager)
+				throw new ArgumentException(string.Format("Wrong State for VNode: {0}", state), "state");
+			return new MemberInfo(instanceId, timeStamp, state, isAlive,
+				internalTcpEndPoint, internalSecureTcpEndPoint,
+				externalTcpEndPoint, externalSecureTcpEndPoint,
+				internalHttpEndPoint, externalHttpEndPoint,
+				-1, -1, -1, -1, -1, Guid.Empty, nodePriority, isReadOnlyReplica);
+		}
 
 		internal MemberInfo(Guid instanceId, DateTime timeStamp, VNodeState state, bool isAlive,
-			IPEndPoint internalTcpEndPoint, IPEndPoint internalSecureTcpEndPoint,
-			IPEndPoint externalTcpEndPoint, IPEndPoint externalSecureTcpEndPoint,
+			EndPoint internalTcpEndPoint, EndPoint internalSecureTcpEndPoint,
+			EndPoint externalTcpEndPoint, EndPoint externalSecureTcpEndPoint,
 			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint,
 			long lastCommitPosition, long writerCheckpoint, long chaserCheckpoint,
 			long epochPosition, int epochNumber, Guid epochId, int nodePriority, bool isReadOnlyReplica) {
@@ -115,18 +136,16 @@ namespace EventStore.Core.Cluster {
 			TimeStamp = dto.TimeStamp;
 			State = dto.State;
 			IsAlive = dto.IsAlive;
-			var internalTcpIp = IPAddress.Parse(dto.InternalTcpIp);
-			var externalTcpIp = dto.ExternalTcpIp != null ? IPAddress.Parse(dto.ExternalTcpIp) : null;
-			InternalTcpEndPoint = new IPEndPoint(internalTcpIp, dto.InternalTcpPort);
+			InternalTcpEndPoint = new DnsEndPoint(dto.InternalTcpIp, dto.InternalTcpPort);
 			InternalSecureTcpEndPoint = dto.InternalSecureTcpPort > 0
-				? new IPEndPoint(internalTcpIp, dto.InternalSecureTcpPort)
+				? new DnsEndPoint(dto.InternalTcpIp, dto.InternalSecureTcpPort)
 				: null;
-			ExternalTcpEndPoint = externalTcpIp != null ? new IPEndPoint(externalTcpIp, dto.ExternalTcpPort) : null;
-			ExternalSecureTcpEndPoint = externalTcpIp != null && dto.ExternalSecureTcpPort > 0
-				? new IPEndPoint(externalTcpIp, dto.ExternalSecureTcpPort)
+			ExternalTcpEndPoint = dto.ExternalTcpIp != null ? new DnsEndPoint(dto.ExternalTcpIp, dto.ExternalTcpPort) : null;
+			ExternalSecureTcpEndPoint = dto.ExternalTcpIp != null && dto.ExternalSecureTcpPort > 0
+				? new DnsEndPoint(dto.ExternalTcpIp, dto.ExternalSecureTcpPort)
 				: null;
-			InternalHttpEndPoint = new IPEndPoint(IPAddress.Parse(dto.InternalHttpIp), dto.InternalHttpPort);
-			ExternalHttpEndPoint = new IPEndPoint(IPAddress.Parse(dto.ExternalHttpIp), dto.ExternalHttpPort);
+			InternalHttpEndPoint = new DnsEndPoint(dto.InternalHttpIp, dto.InternalHttpPort);
+			ExternalHttpEndPoint = new DnsEndPoint(dto.ExternalHttpIp, dto.ExternalHttpPort);
 			LastCommitPosition = dto.LastCommitPosition;
 			WriterCheckpoint = dto.WriterCheckpoint;
 			ChaserCheckpoint = dto.ChaserCheckpoint;

@@ -41,8 +41,18 @@ namespace EventStore.Core.Tests.Services.ElectionsService {
 			Publisher = new FakePublisher();
 
 			_bus = new InMemoryBus(GetType().Name);
+			var memberInfo = MemberInfo.Initial(clusterSettings.Self.NodeInfo.InstanceId, InitialDate,
+				VNodeState.Unknown, true,
+				clusterSettings.Self.NodeInfo.InternalTcp,
+				clusterSettings.Self.NodeInfo.InternalSecureTcp,
+				clusterSettings.Self.NodeInfo.ExternalTcp,
+				clusterSettings.Self.NodeInfo.ExternalSecureTcp,
+				clusterSettings.Self.NodeInfo.InternalHttp,
+				clusterSettings.Self.NodeInfo.ExternalHttp,
+				clusterSettings.Self.NodePriority,
+				clusterSettings.Self.ReadOnlyReplica);
 			ElectionsService = new Core.Services.ElectionsService(Publisher,
-				clusterSettings.Self.NodeInfo,
+				memberInfo,
 				clusterSettings.ClusterNodesCount,
 				new InMemoryCheckpoint(WriterCheckpoint),
 				new InMemoryCheckpoint(ChaserCheckpoint),

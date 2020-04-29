@@ -46,15 +46,15 @@ namespace EventStore.Core.Messages {
 			State = member.State;
 			IsAlive = member.IsAlive;
 
-			InternalTcpIp = member.InternalTcpEndPoint?.Address.ToString() ?? member.InternalSecureTcpEndPoint?.Address.ToString();
-			InternalTcpPort = member.InternalTcpEndPoint == null ? 0 : member.InternalTcpEndPoint.Port;
+			InternalTcpIp = member.InternalTcpEndPoint?.GetHost() ?? member.InternalSecureTcpEndPoint?.GetHost();
+			InternalTcpPort = member.InternalTcpEndPoint == null ? 0 : member.InternalTcpEndPoint.GetPort();
 			InternalSecureTcpPort =
-				member.InternalSecureTcpEndPoint == null ? 0 : member.InternalSecureTcpEndPoint.Port;
+				member.InternalSecureTcpEndPoint == null ? 0 : member.InternalSecureTcpEndPoint.GetPort();
 
-			ExternalTcpIp = member.ExternalTcpEndPoint?.Address.ToString() ?? member.ExternalSecureTcpEndPoint?.Address.ToString();
-			ExternalTcpPort = member.ExternalTcpEndPoint == null ? 0 : member.ExternalTcpEndPoint.Port;
+			ExternalTcpIp = member.ExternalTcpEndPoint?.GetHost() ?? member.ExternalSecureTcpEndPoint?.GetHost();
+			ExternalTcpPort = member.ExternalTcpEndPoint == null ? 0 : member.ExternalTcpEndPoint.GetPort();
 			ExternalSecureTcpPort =
-				member.ExternalSecureTcpEndPoint == null ? 0 : member.ExternalSecureTcpEndPoint.Port;
+				member.ExternalSecureTcpEndPoint == null ? 0 : member.ExternalSecureTcpEndPoint.GetPort();
 
 			InternalHttpIp = member.InternalHttpEndPoint.GetHost();
 			InternalHttpPort = member.InternalHttpEndPoint.GetPort();

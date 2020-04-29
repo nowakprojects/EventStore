@@ -16,7 +16,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 			_endpointsToSkip = new Dictionary<EndPoint, bool>();
 		}
 
-		public void RegisterEndpointToSkip(IPEndPoint endPoint, bool shouldSkip) {
+		public void RegisterEndpointToSkip(EndPoint endPoint, bool shouldSkip) {
 			_endpointsToSkip[endPoint] = shouldSkip;
 		}
 

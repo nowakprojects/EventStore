@@ -269,11 +269,11 @@ namespace EventStore.Core.Tests.Services.Transport.Tcp {
 			get { return false; }
 		}
 
-		public IPEndPoint LocalEndPoint {
+		public EndPoint LocalEndPoint {
 			get { return new IPEndPoint(IPAddress.Loopback, 2); }
 		}
 
-		public IPEndPoint RemoteEndPoint {
+		public EndPoint RemoteEndPoint {
 			get { return new IPEndPoint(IPAddress.Loopback, 1); }
 		}
 

@@ -29,9 +29,9 @@ namespace EventStore.Core.Services.Transport.Tcp {
 		private static readonly ClaimsPrincipal Anonymous = new ClaimsPrincipal(new ClaimsIdentity(new[]{new Claim(ClaimTypes.Anonymous, ""), }));
 		public readonly Guid ConnectionId;
 		public readonly string ConnectionName;
-		public readonly IPEndPoint RemoteEndPoint;
+		public readonly EndPoint RemoteEndPoint;
 
-		public IPEndPoint LocalEndPoint {
+		public EndPoint LocalEndPoint {
 			get { return _connection.LocalEndPoint; }
 		}
 
@@ -127,7 +127,7 @@ namespace EventStore.Core.Services.Transport.Tcp {
 			Guid connectionId,
 			ITcpDispatcher dispatcher,
 			IPublisher publisher,
-			IPEndPoint remoteEndPoint,
+			EndPoint remoteEndPoint,
 			TcpClientConnector connector,
 			bool useSsl,
 			Func<X509Certificate, X509Chain, SslPolicyErrors, ValueTuple<bool, string>> sslServerCertValidator,

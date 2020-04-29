@@ -68,14 +68,14 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 				var inputBus = new InMemoryBus(string.Format("ELECTIONS-INPUT-BUS-{0}", i));
 				var outputBus = new InMemoryBus(string.Format("ELECTIONS-OUTPUT-BUS-{0}", i));
 				var endPoint = new IPEndPoint(BaseEndPoint.Address, BaseEndPoint.Port + i);
-				var nodeInfo = new VNodeInfo(Guid.NewGuid(), 0, endPoint, endPoint, endPoint, endPoint, endPoint,
-					endPoint, false);
-				_instances.Add(new ElectionsInstance(nodeInfo.InstanceId, endPoint, inputBus, outputBus));
+				var memberInfo = MemberInfo.Initial(Guid.NewGuid(), DateTime.UtcNow, VNodeState.Unknown, true,
+					endPoint, endPoint, endPoint, endPoint, endPoint, endPoint, 0, false);
+				_instances.Add(new ElectionsInstance(memberInfo.InstanceId, endPoint, inputBus, outputBus));
 
 				sendOverHttpHandler.RegisterEndPoint(endPoint, inputBus);
 
 				var electionsService = new Core.Services.ElectionsService(outputBus,
-					nodeInfo,
+					memberInfo,
 					InstancesCnt,
 					new InMemoryCheckpoint(),
 					new InMemoryCheckpoint(),

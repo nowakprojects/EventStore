@@ -78,20 +78,20 @@ namespace EventStore.Core.Cluster {
 					(uint)x.InternalHttpEndPoint.GetPort()),
 				InternalTcp = x.InternalSecureTcpEndPoint != null ?
 					new EventStore.Cluster.EndPoint(
-						x.InternalSecureTcpEndPoint.Address.ToString(),
-						(uint)x.InternalSecureTcpEndPoint.Port) :
+						x.InternalSecureTcpEndPoint.GetHost(),
+						(uint)x.InternalSecureTcpEndPoint.GetPort()) :
 					new EventStore.Cluster.EndPoint(
-					x.InternalTcpEndPoint.Address.ToString(),
-					(uint)x.InternalTcpEndPoint.Port),
+					x.InternalTcpEndPoint.GetHost(),
+					(uint)x.InternalTcpEndPoint.GetPort()),
 				InternalTcpUsesTls = x.InternalSecureTcpEndPoint != null,
 				ExternalTcp = x.ExternalSecureTcpEndPoint != null ?
 					new EventStore.Cluster.EndPoint(
-						x.ExternalSecureTcpEndPoint.Address.ToString(),
-						(uint)x.ExternalSecureTcpEndPoint.Port) :
+						x.ExternalSecureTcpEndPoint.GetHost(),
+						(uint)x.ExternalSecureTcpEndPoint.GetPort()) :
 					x.ExternalTcpEndPoint != null ?
 					new EventStore.Cluster.EndPoint(
-					x.ExternalTcpEndPoint.Address.ToString(),
-					(uint)x.ExternalTcpEndPoint.Port) : null,
+					x.ExternalTcpEndPoint.GetHost(),
+					(uint)x.ExternalTcpEndPoint.GetPort()) : null,
 				ExternalTcpUsesTls = x.ExternalSecureTcpEndPoint != null,
 				LastCommitPosition = x.LastCommitPosition,
 				WriterCheckpoint = x.WriterCheckpoint,

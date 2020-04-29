@@ -19,7 +19,7 @@ namespace EventStore.Transport.Http.EntityManagement {
 		internal readonly IHttpResponse Response;
 		public ClaimsPrincipal User => Context.User;
 
-		public HttpEntity(HttpContext context, bool logHttpRequests, IPAddress advertiseAsAddress, int advertiseAsPort,
+		public HttpEntity(HttpContext context, bool logHttpRequests, string advertiseAsAddress, int advertiseAsPort,
 			Action onComplete) {
 			Context = context;
 			Ensure.NotNull(context, nameof(context));
@@ -37,7 +37,7 @@ namespace EventStore.Transport.Http.EntityManagement {
 		}
 
 		public static Uri BuildRequestedUrl(IHttpRequest request,
-			IPAddress advertiseAsAddress, int advertiseAsPort, bool overridePath = false) {
+			string advertiseAsAddress, int advertiseAsPort, bool overridePath = false) {
 			var uriBuilder = new UriBuilder(request.Url);
 			if (overridePath) {
 				uriBuilder.Path = string.Empty;

@@ -66,7 +66,7 @@ namespace EventStore.Core.Tests.Services.GossipService {
 
 		[SetUp]
 		public void Setup() {
-			SUT = new NodeGossipService(_bus, _gossipSeedSource, _currentNode,
+			SUT = new NodeGossipService(_bus, _gossipSeedSource, MemberInfoForVNode(_currentNode, DateTime.UtcNow),
 				new InMemoryCheckpoint(0), new InMemoryCheckpoint(0), new FakeEpochManager(), () => 0L, 0,
 				_gossipInterval, _allowedTimeDifference, _gossipTimeout, _deadMemberRemovalPeriod, _timeProvider, _getNodeToGossipTo);
 
@@ -526,7 +526,7 @@ namespace EventStore.Core.Tests.Services.GossipService {
 			);
 
 		protected override Message When() =>
-			new SystemMessage.BecomeFollower(Guid.NewGuid(), _nodeTwo);
+			new SystemMessage.BecomeFollower(Guid.NewGuid(), MemberInfoForVNode(_nodeTwo, _timeProvider.UtcNow));
 
 		[Test]
 		public void should_update_gossip() {
@@ -581,7 +581,7 @@ namespace EventStore.Core.Tests.Services.GossipService {
 						MemberInfoForVNode(_nodeTwo, _timeProvider.UtcNow),
 						MemberInfoForVNode(_nodeThree, _timeProvider.UtcNow, nodeState: VNodeState.Leader)),
 					_nodeTwo.InternalHttp),
-				new SystemMessage.BecomeFollower(Guid.NewGuid(), _nodeTwo)
+				new SystemMessage.BecomeFollower(Guid.NewGuid(), MemberInfoForVNode(_nodeTwo, _timeProvider.UtcNow))
 			);
 
 		protected override Message When() => new GossipMessage.GossipSendFailed("failed",
@@ -901,13 +901,6 @@ namespace EventStore.Core.Tests.Services.GossipService {
 				0, 0, 0, -1, -1, Guid.Empty, 0, false);
 		}
 
-		private static VNodeInfo NodeInfoFromMemberInfo(MemberInfo memberInfo) {
-			return new VNodeInfo(memberInfo.InstanceId, 0, memberInfo.InternalTcpEndPoint,
-				memberInfo.InternalSecureTcpEndPoint, memberInfo.ExternalTcpEndPoint,
-				memberInfo.ExternalSecureTcpEndPoint, memberInfo.InternalHttpEndPoint, memberInfo.ExternalHttpEndPoint,
-				memberInfo.IsReadOnlyReplica);
-		}
-
 		[Test]
 		public void
 			should_remove_dead_members_which_have_timestamps_older_than_the_allowed_dead_member_removal_timeout() {
@@ -923,7 +916,7 @@ namespace EventStore.Core.Tests.Services.GossipService {
 
 			var updatedCluster = GossipServiceBase.MergeClusters(
 				cluster, cluster, me.InternalHttpEndPoint,
-				info => info, timeProvider.UtcNow, NodeInfoFromMemberInfo(me), NodeInfoFromMemberInfo(peer),
+				info => info, timeProvider.UtcNow, me, peer.InstanceId,
 				allowedTimeDifference, deadMemberRemovalTimeout);
 
 			Assert.That(updatedCluster.Members, Has.Length.EqualTo(2));
@@ -944,7 +937,7 @@ namespace EventStore.Core.Tests.Services.GossipService {
 
 			var updatedCluster = GossipServiceBase.MergeClusters(
 				cluster, cluster, me.InternalHttpEndPoint,
-				info => info, timeProvider.UtcNow, NodeInfoFromMemberInfo(me), NodeInfoFromMemberInfo(peer),
+				info => info, timeProvider.UtcNow, me, peer.InstanceId,
 				allowedTimeDifference, deadMemberRemovalTimeout);
 
 			Assert.That(updatedCluster.Members, Has.Length.EqualTo(3));
