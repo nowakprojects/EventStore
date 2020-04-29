@@ -115,7 +115,7 @@ namespace EventStore.Core.Services.Gossip {
 
 			var oldCluster = _cluster;
 			_cluster = MergeClusters(_cluster, dnsCluster, null, x => x, _timeProvider.UtcNow, _memberInfo,
-				CurrentLeader.InstanceId, AllowedTimeDifference, DeadMemberRemovalPeriod);
+				CurrentLeader?.InstanceId, AllowedTimeDifference, DeadMemberRemovalPeriod);
 			LogClusterChange(oldCluster, _cluster, null);
 
 			_state = GossipState.Working;
@@ -162,7 +162,7 @@ namespace EventStore.Core.Services.Gossip {
 				message.ClusterInfo,
 				message.Server,
 				x => x.InstanceId == _memberInfo.InstanceId ? GetUpdatedMe(x) : x,
-				_timeProvider.UtcNow, _memberInfo, CurrentLeader.InstanceId, AllowedTimeDifference,
+				_timeProvider.UtcNow, _memberInfo, CurrentLeader?.InstanceId, AllowedTimeDifference,
 				DeadMemberRemovalPeriod);
 
 			message.Envelope.ReplyWith(new GossipMessage.SendGossip(_cluster, _memberInfo.InternalHttpEndPoint));
@@ -187,7 +187,7 @@ namespace EventStore.Core.Services.Gossip {
 			if (node == null || !node.IsAlive)
 				return;
 
-			if (CurrentLeader != null && node.InstanceId == CurrentLeader.InstanceId) {
+			if (CurrentLeader != null && node.InstanceId == CurrentLeader?.InstanceId) {
 				Log.Information(
 					"Leader [{leaderEndPoint}, {instanceId:B}] appears to be DEAD (Gossip send failed); wait for TCP to decide.",
 					message.Recipient, node.InstanceId);
@@ -228,7 +228,7 @@ namespace EventStore.Core.Services.Gossip {
 				message.ClusterInfo,
 				message.Server,
 				x => x.InstanceId == _memberInfo.InstanceId ? GetUpdatedMe(x) : x,
-				_timeProvider.UtcNow, _memberInfo, CurrentLeader.InstanceId, AllowedTimeDifference,
+				_timeProvider.UtcNow, _memberInfo, CurrentLeader?.InstanceId, AllowedTimeDifference,
 				DeadMemberRemovalPeriod);
 
 			if (_cluster.HasChangedSince(oldCluster))
