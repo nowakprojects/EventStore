@@ -34,13 +34,13 @@ namespace EventStore.Core.Services.Transport.Http {
 		public IUriRouter UriRouter { get; }
 		public bool LogHttpRequests { get; }
 
-		public IPAddress AdvertiseAsAddress { get; }
+		public string AdvertiseAsHost { get; }
 		public int AdvertiseAsPort { get; }
 
 		private bool _isListening;
 
 		public KestrelHttpService(ServiceAccessibility accessibility, IPublisher inputBus, IUriRouter uriRouter,
-			MultiQueuedHandler multiQueuedHandler, bool logHttpRequests, IPAddress advertiseAsAddress,
+			MultiQueuedHandler multiQueuedHandler, bool logHttpRequests, string advertiseAsHost,
 			int advertiseAsPort, bool disableAuthorization, params EndPoint[] endPoints) {
 			Ensure.NotNull(inputBus, nameof(inputBus));
 			Ensure.NotNull(uriRouter, nameof(uriRouter));
@@ -51,7 +51,7 @@ namespace EventStore.Core.Services.Transport.Http {
 			UriRouter = uriRouter;
 			LogHttpRequests = logHttpRequests;
 
-			AdvertiseAsAddress = advertiseAsAddress;
+			AdvertiseAsHost = advertiseAsHost;
 			AdvertiseAsPort = advertiseAsPort;
 
 

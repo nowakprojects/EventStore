@@ -360,7 +360,7 @@ namespace EventStore.Core {
 			// EXTERNAL HTTP
 			_externalHttpService = new KestrelHttpService(ServiceAccessibility.Public, _mainQueue, new TrieUriRouter(),
 				_workersHandler, vNodeSettings.LogHttpRequests,
-				vNodeSettings.GossipAdvertiseInfo.AdvertiseExternalIPAs,
+				vNodeSettings.GossipAdvertiseInfo.AdvertiseExternalHostAs,
 				vNodeSettings.GossipAdvertiseInfo.AdvertiseExternalHttpPortAs,
 				vNodeSettings.DisableFirstLevelHttpAuthorization,
 				vNodeSettings.NodeInfo.ExternalHttp);

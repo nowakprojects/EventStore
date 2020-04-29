@@ -49,7 +49,7 @@ namespace EventStore.ClusterNode {
 		public int ExtTcpPort { get; set; }
 
 		[ArgDescription(Opts.ExternalIpAdvertiseAsDescr, Opts.InterfacesGroup)]
-		public IPAddress ExtIpAdvertiseAs { get; set; }
+		public string ExtHostAdvertiseAs { get; set; }
 
 		[ArgDescription(Opts.ExternalTcpPortAdvertiseAsDescr, Opts.InterfacesGroup)]
 		public int ExtTcpPortAdvertiseAs { get; set; }
@@ -58,7 +58,7 @@ namespace EventStore.ClusterNode {
 		public int ExtHttpPortAdvertiseAs { get; set; }
 
 		[ArgDescription(Opts.InternalIpAdvertiseAsDescr, Opts.InterfacesGroup)]
-		public IPAddress IntIpAdvertiseAs { get; set; }
+		public string IntHostAdvertiseAs { get; set; }
 
 		[ArgDescription(Opts.InternalTcpPortAdvertiseAsDescr, Opts.InterfacesGroup)]
 		public int IntTcpPortAdvertiseAs { get; set; }
@@ -368,11 +368,11 @@ namespace EventStore.ClusterNode {
 			ExtTcpHeartbeatInterval = Opts.ExtTcpHeartbeatIntervalDefault;
 			IntTcpHeartbeatInterval = Opts.IntTcpHeartbeatIntervalDefault;
 
-			ExtIpAdvertiseAs = Opts.ExternalIpAdvertiseAsDefault;
+			ExtHostAdvertiseAs = Opts.ExternalHostAdvertiseAsDefault;
 			ExtTcpPortAdvertiseAs = Opts.ExternalTcpPortAdvertiseAsDefault;
 			ExtHttpPortAdvertiseAs = Opts.ExternalHttpPortAdvertiseAsDefault;
 
-			IntIpAdvertiseAs = Opts.InternalIpAdvertiseAsDefault;
+			IntHostAdvertiseAs = Opts.InternalHostAdvertiseAsDefault;
 			IntTcpPortAdvertiseAs = Opts.InternalTcpPortAdvertiseAsDefault;
 			IntHttpPortAdvertiseAs = Opts.InternalHttpPortAdvertiseAsDefault;
 

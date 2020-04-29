@@ -584,6 +584,10 @@ namespace EventStore.Core.Services {
 				lastEpoch == null ? Guid.Empty : lastEpoch.EpochId,
 				lastCommitPosition, writerCheckpoint, chaserCheckpoint, _nodePriority);
 		}
+		/*
+		 * BindInformation
+		 * Gossip/Advertise Information
+		 */
 
 		private static string FormatNodeInfo(LeaderCandidate candidate) {
 			return FormatNodeInfo(candidate.InternalHttp, candidate.InstanceId,

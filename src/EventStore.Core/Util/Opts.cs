@@ -288,7 +288,7 @@ namespace EventStore.Core.Util {
 		public const int ExternalTcpPortDefault = 1113;
 
 		public const string ExternalIpAdvertiseAsDescr = "Advertise External Tcp Address As.";
-		public static readonly IPAddress ExternalIpAdvertiseAsDefault = null;
+		public static readonly string ExternalHostAdvertiseAsDefault = null;
 
 		public const string ExternalTcpPortAdvertiseAsDescr = "Advertise External Tcp Port As.";
 		public static readonly int ExternalTcpPortAdvertiseAsDefault = 0;
@@ -297,7 +297,7 @@ namespace EventStore.Core.Util {
 		public static readonly int ExternalHttpPortAdvertiseAsDefault = 0;
 
 		public const string InternalIpAdvertiseAsDescr = "Advertise Internal Tcp Address As.";
-		public static readonly IPAddress InternalIpAdvertiseAsDefault = null;
+		public static readonly string InternalHostAdvertiseAsDefault = null;
 
 		public const string InternalTcpPortAdvertiseAsDescr = "Advertise Internal Tcp Port As.";
 		public static readonly int InternalTcpPortAdvertiseAsDefault = 0;

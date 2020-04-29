@@ -192,7 +192,7 @@ namespace EventStore.Core.Tests.Common.VNodeBuilderTests.when_building {
 		public override void Given() {
 			_builder.WithExternalTcpOn(new IPEndPoint(IPAddress.Loopback, 1113))
 				.WithInternalTcpOn(new IPEndPoint(IPAddress.Loopback, 1112))
-				.AdvertiseExternalIPAs(IPAddress.Parse("196.168.1.1"));
+				.AdvertiseExternalHostAs("196.168.1.1");
 		}
 
 		[Test]
@@ -215,7 +215,7 @@ namespace EventStore.Core.Tests.Common.VNodeBuilderTests.when_building {
 		public override void Given() {
 			_builder.WithExternalTcpOn(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 1113))
 				.WithInternalTcpOn(new IPEndPoint(IPAddress.Loopback, 1112))
-				.AdvertiseExternalIPAs(IPAddress.Parse("10.0.0.1"));
+				.AdvertiseExternalHostAs("10.0.0.1");
 		}
 
 		[Test]
@@ -267,7 +267,7 @@ namespace EventStore.Core.Tests.Common.VNodeBuilderTests.when_building {
 				.WithExternalHttpOn(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 2113))
 				.WithInternalTcpOn(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 1112))
 				.WithExternalTcpOn(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 1113))
-				.AdvertiseExternalIPAs(IPAddress.Parse("10.0.0.1"));
+				.AdvertiseExternalHostAs("10.0.0.1");
 		}
 
 		[Test]
