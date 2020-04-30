@@ -56,8 +56,8 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 						previousMembers[leaderIndex] =
 							MemberInfo.ForVNode(previousLeaderInfo.InstanceId, DateTime.UtcNow, VNodeState.Leader,
 								previousLeaderInfo.IsAlive,
-								new IPEndPoint(IPAddress.Loopback, 1112), null,
-								new IPEndPoint(IPAddress.Loopback, 1113), null,
+								leaderEndPoint, null,
+								leaderEndPoint, null,
 								leaderEndPoint, leaderEndPoint,
 								-1, 0, 0, -1, -1, Guid.Empty, 0, false);
 					}

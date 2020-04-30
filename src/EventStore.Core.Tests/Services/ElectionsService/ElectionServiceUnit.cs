@@ -12,7 +12,6 @@ using EventStore.Core.Services.TimerService;
 using EventStore.Core.Tests.Fakes;
 using EventStore.Core.Tests.Services.TimeService;
 using EventStore.Core.TransactionLog.Checkpoint;
-using Serilog;
 
 namespace EventStore.Core.Tests.Services.ElectionsService {
 	public class ElectionsServiceUnit {

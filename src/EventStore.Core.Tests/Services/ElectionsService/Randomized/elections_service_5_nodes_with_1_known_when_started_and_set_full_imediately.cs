@@ -33,7 +33,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 		private MemberInfo[] CreateInitialGossip(ElectionsInstance instance, ElectionsInstance[] allInstances) {
 			return new[] {
 				MemberInfo.ForVNode(instance.InstanceId, DateTime.UtcNow, VNodeState.Unknown, true,
-					new IPEndPoint(IPAddress.Loopback, 1112), null, new IPEndPoint(IPAddress.Loopback, 1113), null,
+					instance.EndPoint, null, instance.EndPoint, null,
 					instance.EndPoint, instance.EndPoint,
 					-1, 0, 0, -1, -1, Guid.Empty, 0, false)
 			};
@@ -48,7 +48,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 				Console.WriteLine("Update item: {0} : {1}", iteration, item.EndPoint.GetPort());
 				return instances.Select((x, i) =>
 					MemberInfo.ForVNode(x.InstanceId, DateTime.UtcNow, VNodeState.Unknown, true,
-						new IPEndPoint(IPAddress.Loopback, 1112), null, new IPEndPoint(IPAddress.Loopback, 1113), null,
+						x.EndPoint, null, x.EndPoint, null,
 						x.EndPoint, x.EndPoint,
 						-1, 0, 0, -1, -1, Guid.Empty, 0, false)).ToArray();
 			}
