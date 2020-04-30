@@ -130,7 +130,7 @@ namespace EventStore.Core.Services {
 				var srcUrl = manager.RequestedUrl;
 				var srcBase = new Uri($"{srcUrl.Scheme}://{srcUrl.Host}:{srcUrl.Port}/",
 					UriKind.Absolute);
-				var baseUri = new Uri($"{srcUrl.Scheme}://{leaderInfo.ExternalHttpEndPoint}/");
+				var baseUri = new Uri(leaderInfo.ExternalHttpEndPoint.ToHttpUrl(srcUrl.Scheme));
 				var forwardUri = new Uri(baseUri, srcBase.MakeRelativeUri(srcUrl));
 				ForwardRequest(manager, forwardUri);
 				return true;
