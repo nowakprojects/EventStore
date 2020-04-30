@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 
 namespace EventStore.Common.Utils {
 	public static class EndpointExtensions {
@@ -61,6 +63,16 @@ namespace EventStore.Common.Utils {
 			}
 
 			throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(), "An invalid endpoint has been provided");
+		}
+
+		public static IPEndPoint ResolveDnsToIPAddress(this EndPoint endpoint) {
+			var entries = Dns.GetHostAddresses(endpoint.GetHost());
+			if (entries.Length == 0)
+				throw new Exception($"Unable get host addresses for DNS host ({endpoint.GetHost()})");
+			var ipaddress = entries.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+			if (ipaddress == null)
+				throw new Exception($"Could not get an IPv4 address for host '{endpoint.GetHost()}'");
+			return new IPEndPoint(ipaddress, endpoint.GetPort());
 		}
 
 		public static DnsEndPoint ToDnsEndPoint(this IPEndPoint ipEndPoint) {

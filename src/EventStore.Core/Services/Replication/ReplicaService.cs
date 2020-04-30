@@ -161,13 +161,12 @@ namespace EventStore.Core.Services.Replication {
 				_connection.Stop(string.Format("Reconnecting from old leader [{0}] to new leader: [{1}].",
 					_connection.RemoteEndPoint, leaderEndPoint));
 
-			var ip = Dns.GetHostEntry(leaderEndPoint.GetHost());
 			_connection = new TcpConnectionManager(_useSsl ? "leader-secure" : "leader-normal",
 				Guid.NewGuid(),
 				_tcpDispatcher,
 				_publisher,
 				leaderEndPoint.GetHost(),
-				new IPEndPoint(ip.AddressList.First(), leaderEndPoint.GetPort()),
+				leaderEndPoint.ResolveDnsToIPAddress(),
 				_connector,
 				_useSsl,
 				_sslServerCertValidator,
