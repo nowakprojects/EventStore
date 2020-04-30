@@ -6,11 +6,11 @@ using EventStore.Common.Utils;
 
 namespace EventStore.Transport.Tcp {
 	public class TcpConnectionBase : IMonitoredTcpConnection {
-		public EndPoint RemoteEndPoint {
+		public IPEndPoint RemoteEndPoint {
 			get { return _remoteEndPoint; }
 		}
 
-		public EndPoint LocalEndPoint {
+		public IPEndPoint LocalEndPoint {
 			get { return _localEndPoint; }
 		}
 
@@ -114,8 +114,8 @@ namespace EventStore.Transport.Tcp {
 		}
 
 		private Socket _socket;
-		private readonly EndPoint _remoteEndPoint;
-		private EndPoint _localEndPoint;
+		private readonly IPEndPoint _remoteEndPoint;
+		private IPEndPoint _localEndPoint;
 
 		private long _lastSendStarted = -1;
 		private long _lastReceiveStarted = -1;
@@ -132,7 +132,7 @@ namespace EventStore.Transport.Tcp {
 		private int _recvAsyncs;
 		private int _recvAsyncCallbacks;
 
-		public TcpConnectionBase(EndPoint remoteEndPoint) {
+		public TcpConnectionBase(IPEndPoint remoteEndPoint) {
 			Ensure.NotNull(remoteEndPoint, "remoteEndPoint");
 			_remoteEndPoint = remoteEndPoint;
 

@@ -127,7 +127,8 @@ namespace EventStore.Core.Services.Transport.Tcp {
 			Guid connectionId,
 			ITcpDispatcher dispatcher,
 			IPublisher publisher,
-			EndPoint remoteEndPoint,
+			string targetHost,
+			IPEndPoint remoteEndPoint,
 			TcpClientConnector connector,
 			bool useSsl,
 			Func<X509Certificate, X509Chain, SslPolicyErrors, ValueTuple<bool, string>> sslServerCertValidator,
@@ -170,7 +171,7 @@ namespace EventStore.Core.Services.Transport.Tcp {
 
 			RemoteEndPoint = remoteEndPoint;
 			_connection = useSsl
-				? connector.ConnectSslTo(ConnectionId, remoteEndPoint, ConnectionTimeout,
+				? connector.ConnectSslTo(ConnectionId, targetHost, remoteEndPoint, ConnectionTimeout,
 					sslServerCertValidator, sslClientCertificates, OnConnectionEstablished, OnConnectionFailed)
 				: connector.ConnectTo(ConnectionId, remoteEndPoint, ConnectionTimeout, OnConnectionEstablished,
 					OnConnectionFailed);

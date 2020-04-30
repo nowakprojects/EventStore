@@ -23,7 +23,7 @@ namespace EventStore.Transport.Tcp {
 			() => new SocketAsyncEventArgs());
 
 		public static ITcpConnection CreateConnectingTcpConnection(Guid connectionId,
-			EndPoint remoteEndPoint,
+			IPEndPoint remoteEndPoint,
 			TcpClientConnector connector,
 			TimeSpan connectionTimeout,
 			Action<ITcpConnection> onConnectionEstablished,
@@ -92,7 +92,7 @@ namespace EventStore.Transport.Tcp {
 
 		private Action<ITcpConnection, IEnumerable<ArraySegment<byte>>> _receiveCallback;
 
-		private TcpConnection(Guid connectionId, EndPoint remoteEndPoint, bool verbose) : base(remoteEndPoint) {
+		private TcpConnection(Guid connectionId, IPEndPoint remoteEndPoint, bool verbose) : base(remoteEndPoint) {
 			Ensure.NotEmptyGuid(connectionId, "connectionId");
 
 			_connectionId = connectionId;

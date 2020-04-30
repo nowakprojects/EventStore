@@ -16,7 +16,8 @@ namespace EventStore.Transport.Tcp {
 		private static readonly ILogger Log = Serilog.Log.ForContext<TcpConnectionSsl>();
 
 		public static ITcpConnection CreateConnectingConnection(Guid connectionId,
-			EndPoint remoteEndPoint,
+			string targetHost,
+			IPEndPoint remoteEndPoint,
 			Func<X509Certificate, X509Chain, SslPolicyErrors, ValueTuple<bool, string>> serverCertValidator,
 			X509CertificateCollection clientCertificates,
 			TcpClientConnector connector,
@@ -31,7 +32,7 @@ namespace EventStore.Transport.Tcp {
 					connection.InitClientSocket(socket);
 				},
 				(_, socket) => {
-					connection.InitSslStream(remoteEndPoint.GetHost(), serverCertValidator, clientCertificates, verbose);
+					connection.InitSslStream(targetHost, serverCertValidator, clientCertificates, verbose);
 					if (onConnectionEstablished != null)
 						onConnectionEstablished(connection);
 				},
@@ -98,7 +99,7 @@ namespace EventStore.Transport.Tcp {
 		private Func<X509Certificate, X509Chain, SslPolicyErrors, ValueTuple<bool, string>> _clientCertValidator;
 		private readonly byte[] _receiveBuffer = new byte[TcpConnection.BufferManager.ChunkSize];
 
-		private TcpConnectionSsl(Guid connectionId, EndPoint remoteEndPoint, bool verbose) : base(remoteEndPoint) {
+		private TcpConnectionSsl(Guid connectionId, IPEndPoint remoteEndPoint, bool verbose) : base(remoteEndPoint) {
 			Ensure.NotEmptyGuid(connectionId, "connectionId");
 
 			_connectionId = connectionId;
