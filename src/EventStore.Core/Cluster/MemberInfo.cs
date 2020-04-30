@@ -31,18 +31,9 @@ namespace EventStore.Core.Cluster {
 		public readonly bool IsReadOnlyReplica;
 		
 		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
-			EndPoint internalTcpEndPoint, EndPoint externalTcpEndPoint,
 			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint) {
 			return new MemberInfo(instanceId, timeStamp, VNodeState.Manager, isAlive,
-				internalTcpEndPoint, null, externalTcpEndPoint, null,
-				internalHttpEndPoint, externalHttpEndPoint,
-				-1, -1, -1, -1, -1, Guid.Empty, 0, false);
-		}
-
-		public static MemberInfo ForManager(Guid instanceId, DateTime timeStamp, bool isAlive,
-			EndPoint internalHttpEndPoint, EndPoint externalHttpEndPoint) {
-			return new MemberInfo(instanceId, timeStamp, VNodeState.Manager, isAlive,
-				new DnsEndPoint(internalHttpEndPoint.GetHost(), 0), null, new DnsEndPoint(externalHttpEndPoint.GetHost(), 0), null,
+				internalHttpEndPoint, null, externalHttpEndPoint, null,
 				internalHttpEndPoint, externalHttpEndPoint,
 				-1, -1, -1, -1, -1, Guid.Empty, 0, false);
 		}

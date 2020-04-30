@@ -109,9 +109,7 @@ namespace EventStore.Core.Services.Gossip {
 		public void Handle(GossipMessage.GotGossipSeedSources message) {
 			var now = _timeProvider.UtcNow;
 			var dnsCluster = new ClusterInfo(
-				message.GossipSeeds.Select(x => MemberInfo.ForManager(Guid.Empty, now, true, 
-					new IPEndPoint(IPAddress.Loopback, 0), new IPEndPoint(IPAddress.Loopback, 0), //TODO(pieterg) fix this
-					x, x)).ToArray());
+				message.GossipSeeds.Select(x => MemberInfo.ForManager(Guid.Empty, now, true, x, x)).ToArray());
 
 			var oldCluster = _cluster;
 			_cluster = MergeClusters(_cluster, dnsCluster, null, x => x, _timeProvider.UtcNow, _memberInfo,
