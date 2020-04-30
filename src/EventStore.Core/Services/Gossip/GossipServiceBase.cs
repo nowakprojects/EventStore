@@ -110,10 +110,11 @@ namespace EventStore.Core.Services.Gossip {
 			var now = _timeProvider.UtcNow;
 			var dnsCluster = new ClusterInfo(
 				message.GossipSeeds.Select(x => MemberInfo.ForManager(Guid.Empty, now, true, x, x)).ToArray());
-
+			
 			var oldCluster = _cluster;
 			_cluster = MergeClusters(_cluster, dnsCluster, null, x => x, _timeProvider.UtcNow, _memberInfo,
 				CurrentLeader?.InstanceId, AllowedTimeDifference, DeadMemberRemovalPeriod);
+			
 			LogClusterChange(oldCluster, _cluster, null);
 
 			_state = GossipState.Working;
@@ -282,7 +283,8 @@ namespace EventStore.Core.Services.Gossip {
 			EndPoint peerEndPoint, Func<MemberInfo, MemberInfo> update, DateTime utcNow,
 			MemberInfo me, Guid? currentLeaderInstanceId, TimeSpan allowedTimeDifference,
 			TimeSpan deadMemberRemovalTimeout) {
-			var members = myCluster.Members.ToDictionary(member => member.InternalHttpEndPoint);
+			var members = myCluster.Members.ToDictionary(member => member.InternalHttpEndPoint, 
+				new EndPointEqualityComparer());
 			foreach (var member in othersCluster.Members) {
 				if (member.InstanceId == me.InstanceId || member.Is(me.InternalHttpEndPoint)
 				) // we know about ourselves better
