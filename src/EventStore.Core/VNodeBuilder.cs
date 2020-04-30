@@ -1322,11 +1322,11 @@ namespace EventStore.Core {
 			if (_gossipAdvertiseInfo == null) {
 				Ensure.Equal(false, _internalTcp == null && _internalSecureTcp == null, "Both internal TCP endpoints are null");
 
-				string intIpAddress = _internalHttp.Address.ToString(); //this value is just opts.IntIP
-				string extIpAddress = _externalHttp.Address.ToString(); //this value is just opts.ExtIP
+				IPAddress intIpAddress = _internalHttp.Address; //this value is just opts.IntIP
+				IPAddress extIpAddress = _externalHttp.Address; //this value is just opts.ExtIP
 
-				string intIpAddressToAdvertise = _advertiseInternalHostAs ?? intIpAddress;
-				string extIpAddressToAdvertise = _advertiseExternalHostAs ?? extIpAddress;
+				string intIpAddressToAdvertise = _advertiseInternalHostAs ?? intIpAddress.ToString();
+				string extIpAddressToAdvertise = _advertiseExternalHostAs ?? extIpAddress.ToString();
 
 				if (intIpAddress.Equals(IPAddress.Parse("0.0.0.0")) || extIpAddress.Equals(IPAddress.Parse("0.0.0.0"))) {
 					IPAddress nonLoopbackAddress = IPFinder.GetNonLoopbackAddress();
