@@ -75,10 +75,6 @@ namespace EventStore.Common.Utils {
 			return new IPEndPoint(ipaddress, endpoint.GetPort());
 		}
 
-		public static DnsEndPoint ToDnsEndPoint(this IPEndPoint ipEndPoint) {
-			return new DnsEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
-		}
-
 		private static string CreateHttpUrl(string schema, string host, int port, string path) {
 			return $"{schema}://{host}:{port}/{path}";
 		}

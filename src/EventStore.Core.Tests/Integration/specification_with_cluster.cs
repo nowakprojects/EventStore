@@ -113,13 +113,13 @@ namespace EventStore.Core.Tests.Integration {
 			Assert.IsEmpty(duplicates);
 
 			_nodeCreationFactory.Add(0, wait => CreateNode(0,
-				_nodeEndpoints[0], new[] {_nodeEndpoints[1].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[2].InternalHttp.ToDnsEndPoint()},
+				_nodeEndpoints[0], new[] {_nodeEndpoints[1].InternalHttp, _nodeEndpoints[2].InternalHttp},
 				wait));
 			_nodeCreationFactory.Add(1, wait => CreateNode(1,
-				_nodeEndpoints[1], new[] {_nodeEndpoints[0].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[2].InternalHttp.ToDnsEndPoint()},
+				_nodeEndpoints[1], new[] {_nodeEndpoints[0].InternalHttp, _nodeEndpoints[2].InternalHttp},
 				wait));
 			_nodeCreationFactory.Add(2, wait => CreateNode(2,
-				_nodeEndpoints[2], new[] {_nodeEndpoints[0].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[1].InternalHttp.ToDnsEndPoint()},
+				_nodeEndpoints[2], new[] {_nodeEndpoints[0].InternalHttp, _nodeEndpoints[1].InternalHttp},
 				wait));
 
 			_nodes[0] = _nodeCreationFactory[0](true);
@@ -153,7 +153,7 @@ namespace EventStore.Core.Tests.Integration {
 			return _nodes[nodeNum].Shutdown(keepDb: true);
 		}
 
-		protected virtual MiniClusterNode CreateNode(int index, Endpoints endpoints, DnsEndPoint[] gossipSeeds,
+		protected virtual MiniClusterNode CreateNode(int index, Endpoints endpoints, EndPoint[] gossipSeeds,
 			bool wait = true) {
 			var node = new MiniClusterNode(
 				PathName, index, endpoints.InternalTcp, endpoints.InternalTcpSec, endpoints.InternalHttp,

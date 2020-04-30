@@ -14,7 +14,7 @@ namespace EventStore.Core.Tests.Integration {
 				await _nodes[i % 3].Shutdown();
 
 				var node = CreateNode(i % 3, _nodeEndpoints[i % 3],
-					new[] {_nodeEndpoints[(i+1)%3].InternalHttp.ToDnsEndPoint(), _nodeEndpoints[(i+2)%3].InternalHttp.ToDnsEndPoint()});
+					new[] {_nodeEndpoints[(i+1)%3].InternalHttp, _nodeEndpoints[(i+2)%3].InternalHttp});
 				node.Start();
 				_nodes[i % 3] = node;
 
