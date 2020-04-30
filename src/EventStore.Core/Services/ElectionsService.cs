@@ -392,7 +392,7 @@ namespace EventStore.Core.Services {
 			_acceptsReceived.Clear();
 			_leaderProposal = null;
 
-			var leader = GetBestLeaderCandidate(_prepareOkReceived, _servers, _resigningLeaderInstanceId);
+			var leader = GetBestLeaderCandidate(_prepareOkReceived, _servers, _resigningLeaderInstanceId, _lastAttemptedView);
 			if (leader == null) {
 				Log.Verbose("ELECTIONS: (V={lastAttemptedView}) NO LEADER CANDIDATE WHEN TRYING TO SEND PROPOSAL.",
 					_lastAttemptedView);
@@ -415,7 +415,7 @@ namespace EventStore.Core.Services {
 		}
 
 		public static LeaderCandidate GetBestLeaderCandidate(Dictionary<Guid, ElectionMessage.PrepareOk> received,
-			MemberInfo[] servers, Guid? resigningLeaderInstanceId) {
+			MemberInfo[] servers, Guid? resigningLeaderInstanceId, int lastAttemptedView) {
 			var best = received.Values
 				.OrderByDescending(x => x.EpochNumber)
 				.ThenByDescending(x => x.LastCommitPosition)
@@ -442,6 +442,7 @@ namespace EventStore.Core.Services {
 					if (received.TryGetValue(lastLeader, out var leaderMsg) &&
 						leaderMsg.EpochNumber == best.EpochNumber &&
 						leaderMsg.EpochId == best.EpochId) {
+						Log.Debug("ELECTIONS: (V={lastAttemptedView}) Previous Leader (L={leaderCandidateId:B}) from last epoch record is still alive. Proposing it as best leader candidate.", lastAttemptedView, best.EpochLeaderInstanceId);
 						return new LeaderCandidate(leaderMsg.ServerId, leaderMsg.ServerInternalHttp,
 							leaderMsg.EpochNumber, leaderMsg.EpochPosition, leaderMsg.EpochId, leaderMsg.EpochLeaderInstanceId,
 							leaderMsg.LastCommitPosition, leaderMsg.WriterCheckpoint, leaderMsg.ChaserCheckpoint,
@@ -454,13 +455,18 @@ namespace EventStore.Core.Services {
 						x.EpochNumber == best.EpochNumber &&
 						x.EpochId == best.EpochId);
 					if (leader != null) {
+						Log.Debug("ELECTIONS: (V={lastAttemptedView}) Previous Leader (L={leaderCandidateId:B}) from last epoch record is still alive according to gossip. Proposing it as best leader candidate.", lastAttemptedView, best.EpochLeaderInstanceId);
 						return new LeaderCandidate(leader.InstanceId, leader.InternalHttpEndPoint,
 							leader.EpochNumber, leader.EpochPosition, leader.EpochId, best.EpochLeaderInstanceId,
 							leader.LastCommitPosition, leader.WriterCheckpoint, leader.ChaserCheckpoint,
 							leader.NodePriority);
 					}
+
+					Log.Debug("ELECTIONS: (V={lastAttemptedView}) Previous Leader (L={leaderCandidateId:B}) from last epoch record is dead, defaulting to next best candidate.", lastAttemptedView, best.EpochLeaderInstanceId);
 				}
 			}
+
+			Log.Debug("ELECTIONS: (V={lastAttemptedView}) Proposing node: {leaderCandidateId:B} as best leader candidate", lastAttemptedView, best.ServerId);
 			return new LeaderCandidate(best.ServerId, best.ServerInternalHttp,
 				best.EpochNumber, best.EpochPosition, best.EpochId, best.EpochLeaderInstanceId,
 				best.LastCommitPosition, best.WriterCheckpoint, best.ChaserCheckpoint, best.NodePriority);
