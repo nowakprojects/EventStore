@@ -744,8 +744,12 @@ namespace EventStore.Core.Services.VNode {
 
 		private void DenyRequestBecauseNotLeader(Guid correlationId, IEnvelope envelope) {
 			var endpoints = _leader != null
-				? (_leader.ExternalTcpEndPoint, _leader.ExternalSecureTcpEndPoint, _leader.ExternalHttpEndPoint)
-				: (_nodeInfo.ExternalTcp, _nodeInfo.ExternalSecureTcp, _nodeInfo.ExternalHttp);
+				? (ExternalTcpEndPoint: _leader.ExternalTcpEndPoint, 
+					ExternalSecureTcpEndPoint: _leader.ExternalSecureTcpEndPoint,
+					ExternalHttpEndPoint: _leader.ExternalHttpEndPoint)
+				: (ExternalTcpEndPoint: _nodeInfo.ExternalTcp,
+					ExternalSecureTcpEndPoint: _nodeInfo.ExternalSecureTcp,
+					ExternalHttpEndPoint: _nodeInfo.ExternalHttp);
 				
 			envelope.ReplyWith(
 				new ClientMessage.NotHandled(correlationId,
@@ -830,8 +834,12 @@ namespace EventStore.Core.Services.VNode {
 
 		private void DenyRequestBecauseReadOnly(Guid correlationId, IEnvelope envelope) {
 			var endpoints = _leader != null
-				? (_leader.ExternalTcpEndPoint, _leader.ExternalSecureTcpEndPoint, _leader.ExternalHttpEndPoint)
-				: (_nodeInfo.ExternalTcp, _nodeInfo.ExternalSecureTcp, _nodeInfo.ExternalHttp);
+				? (ExternalTcpEndPoint: _leader.ExternalTcpEndPoint,
+					ExternalSecureTcpEndPoint: _leader.ExternalSecureTcpEndPoint,
+					ExternalHttpEndPoint: _leader.ExternalHttpEndPoint)
+				: (ExternalTcpEndPoint: _nodeInfo.ExternalTcp,
+					ExternalSecureTcpEndPoint: _nodeInfo.ExternalSecureTcp,
+					ExternalHttpEndPoint: _nodeInfo.ExternalHttp);
 				
 			envelope.ReplyWith(
 				new ClientMessage.NotHandled(correlationId,
