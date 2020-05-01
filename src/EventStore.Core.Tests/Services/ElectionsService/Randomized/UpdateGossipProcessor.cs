@@ -55,10 +55,7 @@ namespace EventStore.Core.Tests.Services.ElectionsService.Randomized {
 
 						previousMembers[leaderIndex] =
 							MemberInfo.ForVNode(previousLeaderInfo.InstanceId, DateTime.UtcNow, VNodeState.Leader,
-								previousLeaderInfo.IsAlive,
-								leaderEndPoint, null,
-								leaderEndPoint, null,
-								leaderEndPoint, leaderEndPoint,
+								previousLeaderInfo.IsAlive, leaderEndPoint, null, leaderEndPoint, null, leaderEndPoint, leaderEndPoint,
 								-1, 0, 0, -1, -1, Guid.Empty, 0, false);
 					}
 				}

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using EventStore.Common.Options;
 using EventStore.Core.TransactionLog.Chunks;
 
@@ -347,7 +348,7 @@ namespace EventStore.Core.Util {
 		public const string ClusterGossipPortDescr = "The port on which cluster nodes' managers are running.";
 
 		public const string GossipSeedDescr = "Endpoints for other cluster nodes from which to seed gossip";
-		public static readonly DnsEndPoint[] GossipSeedDefault = new DnsEndPoint[0];
+		public static readonly EndPoint[] GossipSeedDefault = Array.Empty<EndPoint>();
 
 		public const string ReadOnlyReplicaDescr = 
 			"Sets this node as a read only replica that is not allowed to participate in elections or accept writes from clients.";

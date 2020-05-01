@@ -761,7 +761,7 @@ namespace EventStore.Core.Tests.Http {
 		[TestFixture, Category("LongRunning")]
 		public class when_retrieving_feed_head_and_http_advertise_ip_is_set : with_admin_user {
 			private JObject _feed;
-			private string advertisedAddress = IPAddress.Parse("127.0.10.1").ToString();
+			private string advertisedAddress = "127.0.10.1";
 			private int advertisedPort = 2116;
 
 			protected override MiniNode CreateMiniNode() {

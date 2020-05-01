@@ -1325,51 +1325,51 @@ namespace EventStore.Core {
 				IPAddress intIpAddress = _internalHttp.Address; //this value is just opts.IntIP
 				IPAddress extIpAddress = _externalHttp.Address; //this value is just opts.ExtIP
 
-				string intIpAddressToAdvertise = _advertiseInternalHostAs ?? intIpAddress.ToString();
-				string extIpAddressToAdvertise = _advertiseExternalHostAs ?? extIpAddress.ToString();
+				string intHostToAdvertise = _advertiseInternalHostAs ?? intIpAddress.ToString();
+				string extHostToAdvertise = _advertiseExternalHostAs ?? extIpAddress.ToString();
 
 				if (intIpAddress.Equals(IPAddress.Parse("0.0.0.0")) || extIpAddress.Equals(IPAddress.Parse("0.0.0.0"))) {
 					IPAddress nonLoopbackAddress = IPFinder.GetNonLoopbackAddress();
 					IPAddress addressToAdvertise = _clusterNodeCount > 1 ? nonLoopbackAddress : IPAddress.Loopback;
 
 					if (intIpAddress.Equals(IPAddress.Parse("0.0.0.0")) && _advertiseInternalHostAs == null) {
-						intIpAddressToAdvertise = addressToAdvertise.ToString();
+						intHostToAdvertise = addressToAdvertise.ToString();
 					}
 
 					if (extIpAddress.Equals(IPAddress.Parse("0.0.0.0")) && _advertiseExternalHostAs == null) {
-						extIpAddressToAdvertise = addressToAdvertise.ToString();
+						extHostToAdvertise = addressToAdvertise.ToString();
 					}
 				}
 
 				DnsEndPoint intTcpEndPoint = null;
 				if (_internalTcp != null) {
 					var intTcpPort = _advertiseInternalTcpPortAs > 0 ? _advertiseInternalTcpPortAs : _internalTcp.Port;
-					intTcpEndPoint = new DnsEndPoint(intIpAddressToAdvertise, intTcpPort);
+					intTcpEndPoint = new DnsEndPoint(intHostToAdvertise, intTcpPort);
 				}
 
 				DnsEndPoint intSecureTcpEndPoint = null;
 				if (_internalSecureTcp != null) {
 					var intSecureTcpPort = _advertiseInternalSecureTcpPortAs > 0 ? _advertiseInternalSecureTcpPortAs : _internalSecureTcp.Port;
-					intSecureTcpEndPoint = new DnsEndPoint(intIpAddressToAdvertise, intSecureTcpPort);
+					intSecureTcpEndPoint = new DnsEndPoint(intHostToAdvertise, intSecureTcpPort);
 				}
 
 				DnsEndPoint extTcpEndPoint = null;
 				if (_externalTcp != null) {
 					int extTcpPort = _advertiseExternalTcpPortAs > 0 ? _advertiseExternalTcpPortAs : _externalTcp.Port;
-					extTcpEndPoint = new DnsEndPoint(extIpAddressToAdvertise, extTcpPort);
+					extTcpEndPoint = new DnsEndPoint(extHostToAdvertise, extTcpPort);
 				}
 
 				DnsEndPoint extSecureTcpEndPoint = null;
 				if (_externalSecureTcp != null) {
 					int extSecureTcpPort = _advertiseExternalSecureTcpPortAs > 0 ? _advertiseExternalSecureTcpPortAs : _externalSecureTcp.Port;
-					extSecureTcpEndPoint = new DnsEndPoint(extIpAddressToAdvertise, extSecureTcpPort);
+					extSecureTcpEndPoint = new DnsEndPoint(extHostToAdvertise, extSecureTcpPort);
 				}
 
 				var intHttpPort = _advertiseInternalHttpPortAs > 0 ? _advertiseInternalHttpPortAs : _internalHttp.Port;
 				var extHttpPort = _advertiseExternalHttpPortAs > 0 ? _advertiseExternalHttpPortAs : _externalHttp.Port;
 
-				var intHttpEndPoint = new DnsEndPoint(intIpAddressToAdvertise, intHttpPort);
-				var extHttpEndPoint = new DnsEndPoint(extIpAddressToAdvertise, extHttpPort);
+				var intHttpEndPoint = new DnsEndPoint(intHostToAdvertise, intHttpPort);
+				var extHttpEndPoint = new DnsEndPoint(extHostToAdvertise, extHttpPort);
 
 				_gossipAdvertiseInfo = new GossipAdvertiseInfo(intTcpEndPoint, intSecureTcpEndPoint,
 					extTcpEndPoint, extSecureTcpEndPoint,

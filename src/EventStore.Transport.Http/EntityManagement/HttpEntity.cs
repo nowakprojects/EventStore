@@ -19,7 +19,7 @@ namespace EventStore.Transport.Http.EntityManagement {
 		internal readonly IHttpResponse Response;
 		public ClaimsPrincipal User => Context.User;
 
-		public HttpEntity(HttpContext context, bool logHttpRequests, string advertiseAsAddress, int advertiseAsPort,
+		public HttpEntity(HttpContext context, bool logHttpRequests, string advertiseAsHost, int advertiseAsPort,
 			Action onComplete) {
 			Context = context;
 			Ensure.NotNull(context, nameof(context));
@@ -29,8 +29,8 @@ namespace EventStore.Transport.Http.EntityManagement {
 			var response = new CoreHttpResponseAdapter(context.Response);
 			_logHttpRequests = logHttpRequests;
 			OnComplete = onComplete;
-			RequestedUrl = BuildRequestedUrl(request, advertiseAsAddress, advertiseAsPort);
-			ResponseUrl = BuildRequestedUrl(request, advertiseAsAddress, advertiseAsPort, true);
+			RequestedUrl = BuildRequestedUrl(request, advertiseAsHost, advertiseAsPort);
+			ResponseUrl = BuildRequestedUrl(request, advertiseAsHost, advertiseAsPort, true);
 			Request = request;
 			Response = response;
 			Context = context;

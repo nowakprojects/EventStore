@@ -186,7 +186,7 @@ namespace EventStore.Core.Services.Gossip {
 			if (node == null || !node.IsAlive)
 				return;
 
-			if (CurrentLeader != null && node.InstanceId == CurrentLeader?.InstanceId) {
+			if (node.InstanceId == CurrentLeader?.InstanceId) {
 				Log.Information(
 					"Leader [{leaderEndPoint}, {instanceId:B}] appears to be DEAD (Gossip send failed); wait for TCP to decide.",
 					message.Recipient, node.InstanceId);
