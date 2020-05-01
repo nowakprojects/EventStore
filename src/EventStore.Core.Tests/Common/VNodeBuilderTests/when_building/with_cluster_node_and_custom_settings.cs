@@ -52,8 +52,8 @@ namespace EventStore.Core.Tests.Common.VNodeBuilderTests.when_building {
 		public override void Given() {
 			var baseAddress = "127.0.1.10";
 			_gossipSeeds = new [] {
-				new DnsEndPoint(baseAddress, 1111), 
-				new DnsEndPoint(baseAddress, 1112), 
+				new DnsEndPoint(baseAddress, 1111),
+				new DnsEndPoint(baseAddress, 1112),
 			};
 			_builder.DisableDnsDiscovery()
 				.WithGossipSeeds(_gossipSeeds);
