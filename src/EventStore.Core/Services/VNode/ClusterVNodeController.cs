@@ -743,22 +743,16 @@ namespace EventStore.Core.Services.VNode {
 		}
 
 		private void DenyRequestBecauseNotLeader(Guid correlationId, IEnvelope envelope) {
-			//TODO (pieter) refactor/clean this up
-			if (_leader != null) {
-				envelope.ReplyWith(
-					new ClientMessage.NotHandled(correlationId,
-						TcpClientMessageDto.NotHandled.NotHandledReason.NotLeader,
-						new TcpClientMessageDto.NotHandled.LeaderInfo(_leader.ExternalTcpEndPoint,
-							_leader.ExternalSecureTcpEndPoint,
-							_leader.ExternalHttpEndPoint)));
-			} else {
-				envelope.ReplyWith(
-					new ClientMessage.NotHandled(correlationId,
-						TcpClientMessageDto.NotHandled.NotHandledReason.NotLeader,
-						new TcpClientMessageDto.NotHandled.LeaderInfo(_nodeInfo.ExternalTcp,
-							_nodeInfo.ExternalSecureTcp,
-							_nodeInfo.ExternalHttp)));
-			}
+			var endpoints = _leader != null
+				? (_leader.ExternalTcpEndPoint, _leader.ExternalSecureTcpEndPoint, _leader.ExternalHttpEndPoint)
+				: (_nodeInfo.ExternalTcp, _nodeInfo.ExternalSecureTcp, _nodeInfo.ExternalHttp);
+				
+			envelope.ReplyWith(
+				new ClientMessage.NotHandled(correlationId,
+					TcpClientMessageDto.NotHandled.NotHandledReason.NotLeader,
+					new TcpClientMessageDto.NotHandled.LeaderInfo(endpoints.ExternalTcpEndPoint,
+						endpoints.ExternalSecureTcpEndPoint,
+						endpoints.ExternalHttpEndPoint)));
 		}
 
 		private void HandleAsReadOnlyReplica(ClientMessage.WriteEvents message) {
@@ -835,22 +829,16 @@ namespace EventStore.Core.Services.VNode {
 		}
 
 		private void DenyRequestBecauseReadOnly(Guid correlationId, IEnvelope envelope) {
-			//TODO (pieter) refactor/clean this up
-			if (_leader != null) {
-				envelope.ReplyWith(
-					new ClientMessage.NotHandled(correlationId,
-						TcpClientMessageDto.NotHandled.NotHandledReason.IsReadOnly,
-						new TcpClientMessageDto.NotHandled.LeaderInfo(_leader.ExternalTcpEndPoint,
-							_leader.ExternalSecureTcpEndPoint,
-							_leader.ExternalHttpEndPoint)));
-			} else {
-				envelope.ReplyWith(
-					new ClientMessage.NotHandled(correlationId,
-						TcpClientMessageDto.NotHandled.NotHandledReason.IsReadOnly,
-						new TcpClientMessageDto.NotHandled.LeaderInfo(_nodeInfo.ExternalTcp,
-							_nodeInfo.ExternalSecureTcp,
-							_nodeInfo.ExternalHttp)));
-			}
+			var endpoints = _leader != null
+				? (_leader.ExternalTcpEndPoint, _leader.ExternalSecureTcpEndPoint, _leader.ExternalHttpEndPoint)
+				: (_nodeInfo.ExternalTcp, _nodeInfo.ExternalSecureTcp, _nodeInfo.ExternalHttp);
+				
+			envelope.ReplyWith(
+				new ClientMessage.NotHandled(correlationId,
+					TcpClientMessageDto.NotHandled.NotHandledReason.IsReadOnly,
+					new TcpClientMessageDto.NotHandled.LeaderInfo(endpoints.ExternalTcpEndPoint,
+						endpoints.ExternalSecureTcpEndPoint,
+						endpoints.ExternalHttpEndPoint)));
 		}
 
 		private void DenyRequestBecauseNotReady(IEnvelope envelope, Guid correlationId) {

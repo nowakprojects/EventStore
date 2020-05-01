@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using EventStore.Common.Utils;
 using EventStore.Core.Cluster;
 using EventStore.Core.Data;

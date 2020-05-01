@@ -8,7 +8,6 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using EventStore.Common.Utils;
-using EventStore.Rags;
 using ILogger = Serilog.ILogger;
 
 namespace EventStore.Transport.Tcp {
