@@ -1341,25 +1341,25 @@ namespace EventStore.Core {
 					}
 				}
 
-				EndPoint intTcpEndPoint = null;
+				DnsEndPoint intTcpEndPoint = null;
 				if (_internalTcp != null) {
 					var intTcpPort = _advertiseInternalTcpPortAs > 0 ? _advertiseInternalTcpPortAs : _internalTcp.Port;
 					intTcpEndPoint = new DnsEndPoint(intIpAddressToAdvertise, intTcpPort);
 				}
 
-				EndPoint intSecureTcpEndPoint = null;
+				DnsEndPoint intSecureTcpEndPoint = null;
 				if (_internalSecureTcp != null) {
 					var intSecureTcpPort = _advertiseInternalSecureTcpPortAs > 0 ? _advertiseInternalSecureTcpPortAs : _internalSecureTcp.Port;
 					intSecureTcpEndPoint = new DnsEndPoint(intIpAddressToAdvertise, intSecureTcpPort);
 				}
 
-				EndPoint extTcpEndPoint = null;
+				DnsEndPoint extTcpEndPoint = null;
 				if (_externalTcp != null) {
 					int extTcpPort = _advertiseExternalTcpPortAs > 0 ? _advertiseExternalTcpPortAs : _externalTcp.Port;
 					extTcpEndPoint = new DnsEndPoint(extIpAddressToAdvertise, extTcpPort);
 				}
 
-				EndPoint extSecureTcpEndPoint = null;
+				DnsEndPoint extSecureTcpEndPoint = null;
 				if (_externalSecureTcp != null) {
 					int extSecureTcpPort = _advertiseExternalSecureTcpPortAs > 0 ? _advertiseExternalSecureTcpPortAs : _externalSecureTcp.Port;
 					extSecureTcpEndPoint = new DnsEndPoint(extIpAddressToAdvertise, extSecureTcpPort);

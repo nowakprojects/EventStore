@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.IO;
 using System.Net;
+using EventStore.Common.Utils;
 using EventStore.Core.TransactionLog.Chunks;
 using EventStore.Core.Services.Monitoring;
 using EventStore.Core.Authentication;
@@ -556,8 +557,10 @@ namespace EventStore.Core.Tests.Common.VNodeBuilderTests.when_building {
 			var intHttpEndpoint = new IPEndPoint(internalIPToAdvertise, 1115);
 			var extHttpEndpoint = new IPEndPoint(externalIPToAdvertise, 1116);
 
-			_advertiseInfo = new Data.GossipAdvertiseInfo(intTcpEndpoint, intSecTcpEndpoint, extTcpEndpoint,
-				extSecTcpEndpoint, intHttpEndpoint, extHttpEndpoint, internalHostAdvertiseAs, externalHostAdvertiseAs,
+			_advertiseInfo = new Data.GossipAdvertiseInfo(intTcpEndpoint.ToDnsEndPoint(),
+				intSecTcpEndpoint.ToDnsEndPoint(), extTcpEndpoint.ToDnsEndPoint(),
+				extSecTcpEndpoint.ToDnsEndPoint(), intHttpEndpoint.ToDnsEndPoint(), extHttpEndpoint.ToDnsEndPoint(),
+				internalHostAdvertiseAs, externalHostAdvertiseAs,
 				intHttpEndpoint.Port, extHttpEndpoint.Port);
 
 			_builder

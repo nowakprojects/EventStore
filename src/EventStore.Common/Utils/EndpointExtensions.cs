@@ -9,33 +9,14 @@ namespace EventStore.Common.Utils {
 		public static string HTTPS_SCHEMA => Uri.UriSchemeHttps;
 
 		public static string ToHttpUrl(this EndPoint endPoint, string schema, string rawUrl = null) {
-			if (endPoint is IPEndPoint) {
-				var ipEndPoint = endPoint as IPEndPoint;
+			if (endPoint is IPEndPoint ipEndPoint) {
 				return CreateHttpUrl(schema, ipEndPoint.Address.ToString(), ipEndPoint.Port,
 					rawUrl != null ? rawUrl.TrimStart('/') : string.Empty);
 			}
 
-			if (endPoint is DnsEndPoint) {
-				var dnsEndpoint = endPoint as DnsEndPoint;
+			if (endPoint is DnsEndPoint dnsEndpoint) {
 				return CreateHttpUrl(schema, dnsEndpoint.Host, dnsEndpoint.Port,
 					rawUrl != null ? rawUrl.TrimStart('/') : string.Empty);
-			}
-
-			return null;
-		}
-
-		public static string ToHttpUrl(this EndPoint endPoint, string schema, string formatString,
-			params object[] args) {
-			if (endPoint is IPEndPoint) {
-				var ipEndPoint = endPoint as IPEndPoint;
-				return CreateHttpUrl(schema, ipEndPoint.Address.ToString(), ipEndPoint.Port,
-					string.Format(formatString.TrimStart('/'), args));
-			}
-
-			if (endPoint is DnsEndPoint) {
-				var dnsEndpoint = endPoint as DnsEndPoint;
-				return CreateHttpUrl(schema, dnsEndpoint.Host, dnsEndpoint.Port,
-					string.Format(formatString.TrimStart('/'), args));
 			}
 
 			return null;
@@ -73,6 +54,10 @@ namespace EventStore.Common.Utils {
 			if (ipaddress == null)
 				throw new Exception($"Could not get an IPv4 address for host '{endpoint.GetHost()}'");
 			return new IPEndPoint(ipaddress, endpoint.GetPort());
+		}
+
+		public static DnsEndPoint ToDnsEndPoint(this IPEndPoint ipEndPoint) {
+			return new DnsEndPoint(ipEndPoint.Address.ToString(), ipEndPoint.Port);
 		}
 
 		private static string CreateHttpUrl(string schema, string host, int port, string path) {

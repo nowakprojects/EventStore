@@ -3,20 +3,20 @@ using EventStore.Common.Utils;
 
 namespace EventStore.Core.Data {
 	public class GossipAdvertiseInfo {
-		public EndPoint InternalTcp { get; set; }
-		public EndPoint InternalSecureTcp { get; set; }
-		public EndPoint ExternalTcp { get; set; }
-		public EndPoint ExternalSecureTcp { get; set; }
-		public EndPoint InternalHttp { get; set; }
-		public EndPoint ExternalHttp { get; set; }
+		public DnsEndPoint InternalTcp { get; set; }
+		public DnsEndPoint InternalSecureTcp { get; set; }
+		public DnsEndPoint ExternalTcp { get; set; }
+		public DnsEndPoint ExternalSecureTcp { get; set; }
+		public DnsEndPoint InternalHttp { get; set; }
+		public DnsEndPoint ExternalHttp { get; set; }
 		public string AdvertiseInternalHostAs { get; set; }
 		public string AdvertiseExternalHostAs { get; set; }
 		public int AdvertiseInternalHttpPortAs { get; set; }
 		public int AdvertiseExternalHttpPortAs { get; set; }
 
-		public GossipAdvertiseInfo(EndPoint internalTcp, EndPoint internalSecureTcp,
-			EndPoint externalTcp, EndPoint externalSecureTcp,
-			EndPoint internalHttp, EndPoint externalHttp,
+		public GossipAdvertiseInfo(DnsEndPoint internalTcp, DnsEndPoint internalSecureTcp,
+			DnsEndPoint externalTcp, DnsEndPoint externalSecureTcp,
+			DnsEndPoint internalHttp, DnsEndPoint externalHttp,
 			string advertiseInternalHostAs, string advertiseExternalHostAs,
 			int advertiseInternalHttpPortAs, int advertiseExternalHttpPortAs) {
 			Ensure.Equal(false, internalTcp == null && internalSecureTcp == null, "Both internal TCP endpoints are null");
