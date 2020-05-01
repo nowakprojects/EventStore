@@ -8,19 +8,14 @@ namespace EventStore.Common.Utils {
 		public static string HTTP_SCHEMA => Uri.UriSchemeHttp;
 		public static string HTTPS_SCHEMA => Uri.UriSchemeHttps;
 
-		public static string ToHttpUrl(this EndPoint endPoint, string schema, string rawUrl = null) {
-			if (endPoint is IPEndPoint ipEndPoint) {
-				return CreateHttpUrl(schema, ipEndPoint.Address.ToString(), ipEndPoint.Port,
-					rawUrl != null ? rawUrl.TrimStart('/') : string.Empty);
-			}
-
-			if (endPoint is DnsEndPoint dnsEndpoint) {
-				return CreateHttpUrl(schema, dnsEndpoint.Host, dnsEndpoint.Port,
-					rawUrl != null ? rawUrl.TrimStart('/') : string.Empty);
-			}
-
-			return null;
-		}
+		public static string ToHttpUrl(this EndPoint endPoint, string schema, string rawUrl = null) =>
+			endPoint switch {
+				IPEndPoint ipEndPoint => CreateHttpUrl(schema, ipEndPoint.Address.ToString(), ipEndPoint.Port,
+					rawUrl != null ? rawUrl.TrimStart('/') : string.Empty),
+				DnsEndPoint dnsEndpoint => CreateHttpUrl(schema, dnsEndpoint.Host, dnsEndpoint.Port,
+					rawUrl != null ? rawUrl.TrimStart('/') : string.Empty),
+				_ => null
+			};
 
 		public static string GetHost(this EndPoint endpoint) =>
 			endpoint switch {
