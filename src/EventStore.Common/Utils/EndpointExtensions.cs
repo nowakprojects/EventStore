@@ -22,29 +22,21 @@ namespace EventStore.Common.Utils {
 			return null;
 		}
 
-		public static string GetHost(this EndPoint endpoint) {
-			if (endpoint is IPEndPoint ip) {
-				return ip.Address.ToString();
-			}
-
-			if (endpoint is DnsEndPoint dns) {
-				return dns.Host;
-			}
-
-			throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(), "An invalid endpoint has been provided");
-		}
+		public static string GetHost(this EndPoint endpoint) =>
+			endpoint switch {
+				IPEndPoint ip => ip.Address.ToString(),
+				DnsEndPoint dns => dns.Host,
+				_ => throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(),
+					"An invalid endpoint has been provided")
+			};
 		
-		public static int GetPort(this EndPoint endpoint) {
-			if (endpoint is IPEndPoint ip) {
-				return ip.Port;
-			}
-
-			if (endpoint is DnsEndPoint dns) {
-				return dns.Port;
-			}
-
-			throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(), "An invalid endpoint has been provided");
-		}
+		public static int GetPort(this EndPoint endpoint) =>
+			endpoint switch {
+				IPEndPoint ip => ip.Port,
+				DnsEndPoint dns => dns.Port,
+				_ => throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint?.GetType(),
+					"An invalid endpoint has been provided")
+			};
 
 		public static IPEndPoint ResolveDnsToIPAddress(this EndPoint endpoint) {
 			var entries = Dns.GetHostAddresses(endpoint.GetHost());
